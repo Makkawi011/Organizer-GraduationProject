@@ -14,8 +14,8 @@ namespace Organizer.Controller
         public static void ImplementOrganizerServices(this List<Node>? nodes ,GeneratorExecutionContext context)
         {
             var orgCtor = nodes?
-                .GetRoot()?
-                .GetOrganizerConstructor();
+                  .GetRoot()?
+                  .GetOrganizerConstructor();
 
             var toDirPath = orgCtor?
                 .GetTargetDirectoryPath()!;
@@ -27,7 +27,7 @@ namespace Organizer.Controller
             orgCtor?.GetCustomerTypeDeclarationSyntaxes()?
                 .IgnoreForTypes(orgCtor)
                 .UpdateForTypes(orgCtor)
-                .ContainForTypes(nodes, toDirPath , context);
+                .ContainForTypes(nodes, toDirPath, context);
 
         }
 

@@ -14,10 +14,10 @@ namespace Organizer.Generator.Services.TypeServices
     public static class ContainTypeServcie
     {
         public static void ContainForTypes
-            (this IEnumerable<BaseTypeDeclarationSyntax> types,
-            List<Node>? nodes ,
-            string targetPath ,
-            GeneratorExecutionContext context)
+             (this IEnumerable<BaseTypeDeclarationSyntax> types,
+             List<Node>? nodes,
+             string targetPath,
+             GeneratorExecutionContext context)
         {
             if (nodes is null) return;
 
@@ -28,17 +28,17 @@ namespace Organizer.Generator.Services.TypeServices
             {
                 node.Value?
                     .GetPrimaryBlockInvocations()
-                    .ContainForTypesByName(types, fullTargetPath , context)
-                    .ContainForTypesByPattern(types, fullTargetPath , context);
+                    .ContainForTypesByName(types, fullTargetPath, context)
+                    .ContainForTypesByPattern(types, fullTargetPath, context);
             }
         }
 
         public static IEnumerable<InvocationExpressionSyntax> ContainForTypesByName
-            (this IEnumerable<InvocationExpressionSyntax> invocations ,
-            IEnumerable<BaseTypeDeclarationSyntax> types , 
-            string fullTargetPath ,
-            GeneratorExecutionContext context)
-        {
+       (this IEnumerable<InvocationExpressionSyntax> invocations,
+       IEnumerable<BaseTypeDeclarationSyntax> types,
+       string fullTargetPath,
+       GeneratorExecutionContext context)
+        { 
             invocations
                 .GetSingleParamsOf(nameof(OrganizerServices.ContainType))
                 .GetTypesToCreateByNames(types)
@@ -48,10 +48,10 @@ namespace Organizer.Generator.Services.TypeServices
         }
 
         public static void ContainForTypesByPattern
-            (this IEnumerable<InvocationExpressionSyntax> invocations,
-            IEnumerable<BaseTypeDeclarationSyntax> types,
-            string fullTargetPath,
-            GeneratorExecutionContext context)
+       (this IEnumerable<InvocationExpressionSyntax> invocations,
+       IEnumerable<BaseTypeDeclarationSyntax> types,
+       string fullTargetPath,
+       GeneratorExecutionContext context)
         {
             var typesInfoToCreate = invocations
                 .GetMultParamsOf(nameof(OrganizerServices.ContainTypes));
@@ -62,7 +62,7 @@ namespace Organizer.Generator.Services.TypeServices
             var ignoredPatterns = typesInfoToCreate
                 .Where(info => info.Count() > 1)
                 .Select(info => info.ElementAt(1));
-            
+
             types
                 .GetTypesToCreateByPatterns(ignoredPatterns , acceptedPatterns)
                 .CreateRequeredTypes(fullTargetPath, context);

@@ -14,7 +14,7 @@ namespace Organizer.Generator
             context
             .Compilation
             .SyntaxTrees
-            .GetClasses()
+            .GetClasses()?
             .GetOrganizerClass()
             .GetOrganizerConstructor()
             .GetBlockSyntaxes()
