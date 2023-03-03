@@ -13,21 +13,14 @@ namespace Organizer.Controller
     {
         public static void ImplementOrganizerServices(this List<Node>? nodes ,GeneratorExecutionContext context)
         {
-            var orgCtor = nodes?
-                .GetRoot()?
-                .GetOrganizerConstructor();
 
-            var toDirPath = orgCtor?
-                .GetTargetDirectoryPath()!;
 
             nodes
                 .Where(node => node.IsLeaf)
                 .CreateForFolders(toDirPath);
 
-            orgCtor?.GetCustomerTypeDeclarationSyntaxes()?
                 .IgnoreForTypes(orgCtor)
                 .UpdateForTypes(orgCtor)
-                .ContainForTypes(nodes, toDirPath , context);
 
         }
 
