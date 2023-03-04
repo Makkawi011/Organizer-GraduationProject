@@ -32,7 +32,8 @@ public class FilesTests
 
         // Assert
 
-        Assert.Equivalent(actualTypes.Select(type => type.ToString()), expectedTypes.Select(type => type.ToString()));
+        Assert.Equivalent(actualTypes!.Select(type => type.ToString()),
+            expectedTypes.Select(type => type.ToString()));
     }
 
     [Fact]
@@ -64,7 +65,7 @@ public class FilesTests
 
         // Assert
 
-        Assert.Equivalent(actualTypes.Select(type => type.ToString()), expectedTypes.Select(type => type.ToString()));
+        Assert.Equivalent(actualTypes!.Select(type => type.ToString()), expectedTypes.Select(type => type.ToString()));
     }
 
     [Fact]
@@ -72,8 +73,8 @@ public class FilesTests
     {
         //Arrange
         string path = new StackTrace(true)
-            .GetFrame(0)
-            .GetFileName();
+            .GetFrame(0)!
+            .GetFileName()!;
 
         var paths = new[] { path };
 
@@ -89,7 +90,7 @@ public class FilesTests
             .Invoke(null, new[] { paths });
 
         //Assert 
-        Assert.Equal(expectedContent , actualContent.Single());
+        Assert.Equal(expectedContent , actualContent!.Single());
 
     }
 
@@ -98,10 +99,10 @@ public class FilesTests
     {
         //Arrange
         string currentFilePath = new StackTrace(true)
-            .GetFrame(0)
-            .GetFileName();
+            .GetFrame(0)!
+            .GetFileName()!;
 
-        string path = Path.GetDirectoryName(currentFilePath);
+        string path = Path.GetDirectoryName(currentFilePath)!;
 
 
         //Act
@@ -111,10 +112,10 @@ public class FilesTests
             BindingFlags.Static);
 
         var actualPaths = (IEnumerable<string>?)method!
-            .Invoke(null, new[] { path });
+            .Invoke(null, new[] { path })!;
 
         //Assert 
-        Assert.True(actualPaths.Any(p => p == currentFilePath));
+        Assert.Contains(actualPaths, p => p == currentFilePath);
 
     }
     [Fact]
@@ -138,8 +139,8 @@ public class FilesTests
             BindingFlags.NonPublic |
             BindingFlags.Static);
 
-        var actualPath = (string) method
-            .Invoke(null, new[] { attributeSyntax });
+        var actualPath = (string) method!
+            .Invoke(null, new[] { attributeSyntax })!;
 
         //Assert 
         Assert.Equal(actualPath , currentFilePath);
@@ -150,10 +151,10 @@ public class FilesTests
     {
         //Arrange
         string currentFilePath = new StackTrace(true)
-            .GetFrame(0)
-            .GetFileName();
+            .GetFrame(0)!
+            .GetFileName()!;
 
-        string currentDirectory = Path.GetDirectoryName(currentFilePath);
+        string currentDirectory = Path.GetDirectoryName(currentFilePath)!;
 
         var attributeSyntax = CSharpSyntaxTree
             .ParseText($"[From(\"{currentDirectory}\")]")
@@ -168,10 +169,10 @@ public class FilesTests
             BindingFlags.Static)!;
 
         var actualPaths = (IEnumerable<string>?)method
-            .Invoke(null, new[] { attributeSyntax });
+            .Invoke(null, new[] { attributeSyntax })!;
 
         //Assert 
-        Assert.True(actualPaths.Any(p => p == currentFilePath));
+        Assert.Contains(actualPaths, p => p == currentFilePath);
 
     }
 
@@ -180,8 +181,8 @@ public class FilesTests
     {
         //Arrange
         string currentFilePath = new StackTrace(true)
-            .GetFrame(0)
-            .GetFileName();
+            .GetFrame(0)!
+            .GetFileName()!;
 
         string currentDirectory = "\""+ Path.GetDirectoryName(currentFilePath) +"\"";
 
@@ -201,12 +202,13 @@ public class FilesTests
 
         //Act
 
-        var actualtypes = organizerCtor.GetCustomerTypeDeclarationSyntaxes();
+        var actualtypes = organizerCtor
+            .GetCustomerTypeDeclarationSyntaxes()!;
 
         //Assert 
-        Assert.True(actualtypes
+        Assert.Contains(actualtypes
             .Select(t => t.Identifier.Text)
-            .Any(name => name == nameof(FilesTests)));
+            , name => name == nameof(FilesTests));
 
     }
     [Fact]
@@ -214,10 +216,10 @@ public class FilesTests
     {
         //Arrange
         string currentFilePath = new StackTrace(true)
-            .GetFrame(0)
-            .GetFileName();
+            .GetFrame(0)!
+            .GetFileName()!;
 
-        string currentDirectory = Path.GetDirectoryName(currentFilePath);
+        string currentDirectory = Path.GetDirectoryName(currentFilePath)!;
 
 
         var organizerCtor = CSharpSyntaxTree.ParseText(@"

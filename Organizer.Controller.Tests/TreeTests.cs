@@ -25,15 +25,15 @@ public class TreeTests
         var expectedNodes = nodes.ToList();
 
         // Act
-        var actualNodes = blocks.BuildFileStructureTree();
+        var actualNodes = blocks.BuildFileStructureTree()!;
 
         // Assert
         Assert.Equal(expectedNodes.First().Children.Count, actualNodes.First().Children.Count);
         Assert.Equivalent(expectedNodes.Last().Children, actualNodes.Last().Children);
         Assert.Null(actualNodes.First().Parent);
         Assert.Equivalent(expectedNodes.First().Parent, actualNodes.First().Parent);
-        Assert.Equivalent(expectedNodes.Last().Value.Block, actualNodes.Last().Value.Block);
-        Assert.Equivalent(expectedNodes.First().Value.Header, actualNodes.First().Value.Header);
+        Assert.Equivalent(expectedNodes.Last().Value!.Block, actualNodes.Last().Value!.Block);
+        Assert.Equivalent(expectedNodes.First().Value!.Header, actualNodes.First().Value!.Header);
 
     }
 
@@ -65,12 +65,7 @@ public class TreeTests
              .DescendantNodes()
              .OfType<BlockSyntax>();
     }
-    private static List<Node> CreateNodeDescending(IEnumerable<BlockSyntax> blocks)
-    {
-        var nodes = CreateNodes(blocks);
-        nodes.Reverse();
-        return nodes;
-    }
+
     private static List<Node> CreateNodes(IEnumerable<BlockSyntax> blocks)
     {
         return Enumerable.Range(0, blocks.Count())

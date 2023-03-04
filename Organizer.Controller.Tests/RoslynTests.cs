@@ -17,7 +17,7 @@ public class RoslynTests
             .First();
 
         // Act
-        var actualOrganizerCtor = organizerClss.GetOrganizerConstructor();
+        var actualOrganizerCtor = organizerClss.GetOrganizerConstructor()!;
 
         // Assert
 
@@ -38,7 +38,7 @@ public class RoslynTests
         var node = CreateNode(organizerClss);
 
         // Act
-        var actualOrganizerCtor = node.GetOrganizerConstructor();
+        var actualOrganizerCtor = node.GetOrganizerConstructor()!;
 
         // Assert
 
@@ -57,7 +57,7 @@ public class RoslynTests
             .First();
 
         // Act
-        var blockSyntaxes = organizerCtor.GetBlockSyntaxes();
+        var blockSyntaxes = organizerCtor.GetBlockSyntaxes()!;
 
         // Assert
 
