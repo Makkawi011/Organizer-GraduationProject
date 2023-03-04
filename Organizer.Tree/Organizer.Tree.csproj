@@ -13,4 +13,16 @@
     <ProjectReference Include="..\Organizer.Client\Organizer.Client.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Organizer.Tree.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup> 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Organizer.Controller.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+  
+  
 </Project>
