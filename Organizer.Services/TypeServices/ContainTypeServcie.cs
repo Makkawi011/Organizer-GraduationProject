@@ -34,10 +34,10 @@ namespace Organizer.Generator.Services.TypeServices
         }
 
         public static IEnumerable<InvocationExpressionSyntax> ContainForTypesByName
-       (this IEnumerable<InvocationExpressionSyntax> invocations,
-       IEnumerable<BaseTypeDeclarationSyntax> types,
-       string fullTargetPath,
-       GeneratorExecutionContext context)
+           (this IEnumerable<InvocationExpressionSyntax> invocations,
+           IEnumerable<BaseTypeDeclarationSyntax> types,
+           string fullTargetPath,
+           GeneratorExecutionContext context)
         { 
             invocations
                 .GetSingleParamsOf(nameof(OrganizerServices.ContainType))
@@ -48,10 +48,10 @@ namespace Organizer.Generator.Services.TypeServices
         }
 
         public static void ContainForTypesByPattern
-       (this IEnumerable<InvocationExpressionSyntax> invocations,
-       IEnumerable<BaseTypeDeclarationSyntax> types,
-       string fullTargetPath,
-       GeneratorExecutionContext context)
+           (this IEnumerable<InvocationExpressionSyntax> invocations,
+           IEnumerable<BaseTypeDeclarationSyntax> types,
+           string fullTargetPath,
+           GeneratorExecutionContext context)
         {
             var typesInfoToCreate = invocations
                 .GetMultParamsOf(nameof(OrganizerServices.ContainTypes));
@@ -94,16 +94,17 @@ namespace Organizer.Generator.Services.TypeServices
         private static IEnumerable<InvocationExpressionSyntax> GetPrimaryBlockInvocations
             (this Value value)
         {
-            var invocations = value
+            var invocations = new string(
+                value
                 .Block!
                 .Statements
                 .ToString()
                 .Split('}')
                 .SelectMany(s => s.TakeWhile(c => c != '{'))
-                .ToArray();
+                .ToArray());
 
             return CSharpSyntaxTree
-                .ParseText(new string(invocations))
+                .ParseText(invocations)
                 .GetRoot()
                 .DescendantNodes()
                 .OfType<InvocationExpressionSyntax>();
@@ -112,16 +113,16 @@ namespace Organizer.Generator.Services.TypeServices
         private static IEnumerable<BaseTypeDeclarationSyntax> GetTypesToCreateByNames
             (this IEnumerable<string> typesNameToCreate,
             IEnumerable<BaseTypeDeclarationSyntax> types)
-            => (from type in types
-                join typeName in typesNameToCreate
-                on type.Identifier.Text.ToString() equals typeName
-                select type) as IEnumerable<BaseTypeDeclarationSyntax>;
+            => from type in types
+               join typeName in typesNameToCreate
+               on type.Identifier.Text.ToString() equals typeName
+               select type;
 
         private static IEnumerable<BaseTypeDeclarationSyntax> GetTypesToCreateByPatterns
             (this IEnumerable<BaseTypeDeclarationSyntax> types,
             IEnumerable<string> ignoredPatterns,
-            IEnumerable<string> acceptedPatterns) 
-            => (from type in types
+            IEnumerable<string> acceptedPatterns)
+            =>  from type in types
 
                 from ignorePattern in ignoredPatterns
                 where !Regex.IsMatch(type.Identifier.Text.ToString(), ignorePattern)
@@ -129,6 +130,6 @@ namespace Organizer.Generator.Services.TypeServices
                 from acceptPattern in acceptedPatterns
                 where Regex.IsMatch(type.Identifier.Text.ToString(), acceptPattern)
 
-                select type) as IEnumerable<BaseTypeDeclarationSyntax>;
+                select type;
     }
 }
