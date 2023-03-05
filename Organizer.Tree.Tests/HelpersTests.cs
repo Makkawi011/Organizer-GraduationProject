@@ -19,8 +19,72 @@ public class HelpersTests
         Assert.Equal(depth, actualDepth);
     }
 
+    [Fact]
+    public void GetParameterValue_WhenInputArgumentSyntax_ReturnTheActualParameters()
+    {
+        // Arrange
+        var code = @"invoc(nameof(parameter))";
 
+        var argumentSyntax =
+            CSharpSyntaxTree.ParseText(code)
+            .GetRoot()
+            .DescendantNodes()
+            .OfType<ArgumentSyntax>()
+            .First();
 
+        // Act
+        var actual = argumentSyntax
+            .GetParameterValue();
+
+        // Assert
+        Assert.Equal("parameter", actual);
+    }
+
+    [Fact]
+    public void GetName_WhenInputInvocationExpressionSyntax_ReturnTheMethodName()
+    {
+        // Arrange
+        var code = @"MethodName(parameters)";
+
+        var invocation =
+            CSharpSyntaxTree.ParseText(code)
+            .GetRoot()
+            .DescendantNodes()
+            .OfType<InvocationExpressionSyntax>()
+            .First();
+
+        // Act
+        var method = typeof(Helpers)
+            .GetMethod("GetName",
+            BindingFlags.NonPublic |
+            BindingFlags.Static);
+
+        var actual = (string?)method!
+            .Invoke(null, new[] { invocation });
+
+        // Assert
+        Assert.Equal("MethodName", actual);
+    }
+
+    [Fact]
+    public void IsName_WhenInputInvocationExpressionSyntax_ReturnTheMethodName()
+    {
+        // Arrange
+        var code = @"MethodName(parameters)";
+
+        var invocation =
+            CSharpSyntaxTree.ParseText(code)
+            .GetRoot()
+            .DescendantNodes()
+            .OfType<InvocationExpressionSyntax>()
+            .First();
+
+        // Act
+        var actual = invocation.IsName("MethodName");
+
+        // Assert
+        Assert.True(actual);
+    }
     #region Helpers
     static Node? CreatNodeWithDepth(int depth)
     {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Organizer.Client;
 using Organizer.Services;
-using Organizer.Tree;
 
 namespace Organizer.Generator.Services.TypeServices
 {
@@ -14,7 +13,7 @@ namespace Organizer.Generator.Services.TypeServices
             ConstructorDeclarationSyntax organizerCtor)
         {
             var invocations = organizerCtor
-                .GetInvocations();
+                .GetInvocations()!;
 
             return types
                 .IgnoreTypesByName(invocations)
@@ -23,36 +22,26 @@ namespace Organizer.Generator.Services.TypeServices
 
         private static IEnumerable<BaseTypeDeclarationSyntax> IgnoreTypesByName
             (this IEnumerable<BaseTypeDeclarationSyntax> types,
-            IEnumerable<InvocationExpressionSyntax>? invocations)
-        {
+            IEnumerable<InvocationExpressionSyntax> invocations) =>
             //get ignored types names to get all the types
             //without those have exactly same name
+            from type in types
+            let typeName = type.Identifier.Text.ToString()
+            let ignoredNames = invocations.GetSingleParamsOf(nameof(OrganizerServices.IgnoreType))
+            where ! ignoredNames.Any(ignrName => typeName.Equals(ignrName))
+            select type;
 
-            var ignoredTypesByName = invocations
-                .GetSingleParamsOf(nameof(OrganizerServices.IgnoreType));
-
-            return types
-                .Where(baseType => !ignoredTypesByName
-                    .Any(ignoredTypeName => ignoredTypeName
-                        .Equals(baseType.Identifier.Text))); 
-        }
 
         private static IEnumerable<BaseTypeDeclarationSyntax> IgnoreTypesByPattern
             (this IEnumerable<BaseTypeDeclarationSyntax> types,
-            IEnumerable<InvocationExpressionSyntax> invocations)
-        {
+            IEnumerable<InvocationExpressionSyntax> invocations) =>
             //get ignored patterns to get all the types
             //without those have ignored patterns in it's name
-
-            var ignoredTypesByPatterns = invocations
-                .GetSingleParamsOf(nameof(OrganizerServices.IgnoreTypes));
-
-            return types
-                .Where(baseType => !ignoredTypesByPatterns
-                    .Any(ignoredTypePattern => ignoredTypePattern
-                        .Contains(baseType.Identifier.Text)));
-
-        }
+            from type in types
+            let typeName = type.Identifier.Text.ToString()
+            let ignoredPatterns = invocations.GetSingleParamsOf(nameof(OrganizerServices.IgnoreTypes))
+            where ! ignoredPatterns.Any(ignrPtrn => typeName.Contains(ignrPtrn))
+            select type;
 
 
     }

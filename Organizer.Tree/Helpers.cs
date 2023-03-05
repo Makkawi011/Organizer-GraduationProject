@@ -29,7 +29,7 @@ namespace Organizer.Tree
                 .ToString();
         }
 
-
+      
         public static string GetParameterValue(this ArgumentSyntax arg)
             => arg.ToString()
             .Replace("\"", string.Empty)

@@ -25,7 +25,7 @@ namespace Organizer.Services
                 .DescendantNodes()
                 .OfType<BaseTypeDeclarationSyntax>()
                 .SingleOrDefault();
-        internal static IEnumerable<InvocationExpressionSyntax> GetInvocationByName
+        internal static IEnumerable<InvocationExpressionSyntax> GetInvocationsByName
             (this IEnumerable<InvocationExpressionSyntax> invocations, string organizerServiceName)
             => invocations.Where(invoc => invoc.IsName(organizerServiceName));
 
@@ -34,18 +34,18 @@ namespace Organizer.Services
             string organizerServiceName)
         {
             return invocations
-                .GetInvocationByName(organizerServiceName)
+                .GetInvocationsByName(organizerServiceName)
                 .SelectMany(invoc => invoc.ArgumentList.Arguments)
-                .Select(arg => arg.GetTypeName());
+                .Select(arg => arg.GetParameterValue());
         }
         internal static IEnumerable<IEnumerable<string>> GetMultParamsOf
             (this IEnumerable<InvocationExpressionSyntax> invocations,
             string organizerServiceName)
         {
             return invocations
-                .GetInvocationByName(organizerServiceName)
+                .GetInvocationsByName(organizerServiceName)
                 .Select(invoc => invoc.ArgumentList.Arguments)
-                .Select(args => args.Select(arg => arg.GetTypeName()));
+                .Select(args => args.Select(arg => arg.GetParameterValue()));
         }
     }
 }
