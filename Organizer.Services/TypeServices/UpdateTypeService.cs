@@ -2,7 +2,6 @@
 
 using Organizer.Client;
 using Organizer.Services;
-using Organizer.Tree;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +15,8 @@ namespace Organizer.Generator.Services.TypeServices
             (this IEnumerable<BaseTypeDeclarationSyntax> types,
             ConstructorDeclarationSyntax organizerCtor)
         {
-            var invocations = organizerCtor.GetInvocations();
+            var invocations = organizerCtor
+                .GetInvocations()!;
 
             return types
                 .UpdateForTypesByName(invocations)
@@ -77,19 +77,13 @@ namespace Organizer.Generator.Services.TypeServices
 
         private static string UpdaterByTypeName(string type , IEnumerable<IEnumerable<string>>? parameters)
         {
-            string newType = type;
-
-            foreach ((string oldTypeName, string newTypeName)
-                in from @params in parameters
-                   let oldTypeName = @params.First()
-                   let newTypeName = @params.Last()
-                   select (oldTypeName, newTypeName))
+            foreach (var @params in parameters!)
             {
-                newType = Regex.Replace(type, $"\b{oldTypeName}\b", newTypeName);
+                var oldTypeName = @params.First();
+                var newTypeName = @params.Last();
+                type = Regex.Replace(type, oldTypeName, newTypeName);
             }
-
-            return newType;
-
+            return type;
         }
 
     }

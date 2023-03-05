@@ -74,6 +74,7 @@ public class IgnoreTypeServiceTests
         var typesRested = (IEnumerable<BaseTypeDeclarationSyntax>?)method!
             .Invoke(null, new object[] { types, invocations })!;
 
+        // Assert
         Assert.NotEmpty(typesRested);
         Assert.Equal(2, typesRested.Count());
         Assert.Contains(typesRested, t => t.Identifier.Text != "Garbage");
