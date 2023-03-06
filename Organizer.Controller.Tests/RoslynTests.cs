@@ -122,6 +122,27 @@ public class RoslynTests
         Assert.Equivalent(expectedClasses, actualClasses);
     }
 
+    [Fact]
+    public void GetOrganizerClass_CollectionOfClassSyntaxDecliration_OrganizerClassSyntaxDecliration()
+    {
+        // Arrange
+        var classes = CSharpSyntaxTree
+            .ParseText(@"
+            class Organizer : OrganizerServices {}
+            class clss1 {}
+            class clss2 {}")
+            .GetRoot()
+            .DescendantNodes()
+            .OfType<ClassDeclarationSyntax>();
+
+        var expectedClass = classes.First();
+
+        // Act
+        var actualClass = classes.GetOrganizerClass();
+
+        // Assert
+        Assert.Equal(expectedClass, actualClass);
+    }
 
     #region Helpers
     private static Node CreateNode(ClassDeclarationSyntax classDeclaration)

@@ -12,7 +12,6 @@ namespace Organizer.Controller
 {
     internal static class Files
     {
-        static readonly Func<string, bool> IsFile = path => File.GetAttributes(path).HasFlag(FileAttributes.SparseFile);
 
         internal static string GetTargetDirectoryPath(this ConstructorDeclarationSyntax ctor)
         {
@@ -21,7 +20,7 @@ namespace Organizer.Controller
                 .Single()
                 .GetPath();
 
-            return IsFile(toPath) ? Path.GetDirectoryName(toPath) : toPath;
+            return File.Exists(toPath) ? Path.GetDirectoryName(toPath) : toPath;
         }
 
         internal static IEnumerable<BaseTypeDeclarationSyntax> GetCustomerTypeDeclarationSyntaxes(this ConstructorDeclarationSyntax organizerCtor)
@@ -44,7 +43,7 @@ namespace Organizer.Controller
                 List<string> paths = new List<string>();
 
                 var inputPath = a.GetPath();
-                if (IsFile(inputPath)) paths.Add(inputPath);
+                if (File.Exists(inputPath)) paths.Add(inputPath);
                 else paths.AddRange(inputPath.GetCSFilesPaths());
 
                 return paths;
@@ -53,11 +52,11 @@ namespace Organizer.Controller
 
         private static string GetPath(this AttributeSyntax attribute)
         => attribute
-                    .ArgumentList
-                    .Arguments
-                    .First()
-                    .ToString()
-                    .Replace("\"", string.Empty);
+            .ArgumentList
+            .Arguments
+            .First()
+            .ToString()
+            .Replace("\"", string.Empty);
 
         private static IEnumerable<string> GetCSFilesPaths(this string path)
             => Directory.GetFiles(path, "*.cs", SearchOption.AllDirectories);

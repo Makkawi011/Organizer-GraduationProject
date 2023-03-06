@@ -22,8 +22,8 @@ namespace Organizer.Tree
                 {
                     Value = new Value()
                     {
-                        Block = block
-                        //Header => null
+                        Block = block,
+                        Header = Enumerable.Empty<InvocationExpressionSyntax>()
                     }
                 };
 

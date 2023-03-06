@@ -11,10 +11,11 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
   </ItemGroup>
 
+  <!-- Add this as a new ItemGroup, replacing paths and names appropriately -->
   <ItemGroup>
-    <ProjectReference Include="..\Organizer.Client\Organizer.Client.csproj" />
-    <ProjectReference Include="..\Organizer.Controller\Organizer.Controller.csproj" />
-    <ProjectReference Include="..\Organizer.Tree\Organizer.Tree.csproj" />
+    <ProjectReference Include="..\Organizer.Usage\Organizer.Usage.csproj" />
+    <!--<ProjectReference Include="C:\Users\a\Source\Repos\Organizer-GraduationProject\Organizer.Generator\Organizer.Generator.csproj" 
+                      OutputItemType="Analyzer" 
+                      ReferenceOutputAssembly="false" />-->
   </ItemGroup>
-
 </Project>

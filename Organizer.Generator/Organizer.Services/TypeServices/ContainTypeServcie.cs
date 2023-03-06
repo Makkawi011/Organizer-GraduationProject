@@ -4,10 +4,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Organizer.Client;
 using Organizer.Services;
 using Organizer.Tree;
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 namespace Organizer.Generator.Services.TypeServices
 {
@@ -16,33 +19,40 @@ namespace Organizer.Generator.Services.TypeServices
         public static void ContainForTypes
              (this IEnumerable<BaseTypeDeclarationSyntax> types,
              List<Node> nodes,
-             string targetPath,
-             GeneratorExecutionContext context)
+             string targetPath)
         {
             if (nodes is null) return;
+
+            string paths = string.Empty;
+            int x = 0;
 
             foreach ((Node node, string fullTargetPath)
                 in from node in nodes
                    let fullTargetPath = GetFullTargetPath(targetPath, node)
                    select (node, fullTargetPath))
             {
-                node.Value?
+                paths += x++ + "=>" + fullTargetPath;
+                if (x == 1) continue;
+
+                node.Value
                     .GetPrimaryBlockInvocations()
-                    .ContainForTypesByName(types, fullTargetPath, context)
-                    .ContainForTypesByPattern(types, fullTargetPath, context);
+                    .ContainForTypesByName(types, fullTargetPath)
+                    .ContainForTypesByPattern(types, fullTargetPath);
+
             }
+
         }
 
         public static IEnumerable<InvocationExpressionSyntax> ContainForTypesByName
            (this IEnumerable<InvocationExpressionSyntax> invocations,
            IEnumerable<BaseTypeDeclarationSyntax> types,
-           string fullTargetPath,
-           GeneratorExecutionContext context)
+           string fullTargetPath)
         { 
             invocations
                 .GetSingleParamsOf(nameof(OrganizerServices.ContainType))
                 .GetTypesToCreateByNames(types)
-                .CreateRequeredTypes(fullTargetPath, context);
+                .CreateRequeredTypes(fullTargetPath);
+
 
             return invocations;
         }
@@ -50,36 +60,47 @@ namespace Organizer.Generator.Services.TypeServices
         public static void ContainForTypesByPattern
            (this IEnumerable<InvocationExpressionSyntax> invocations,
            IEnumerable<BaseTypeDeclarationSyntax> types,
-           string fullTargetPath,
-           GeneratorExecutionContext context)
+           string fullTargetPath)
         {
             var typesInfoToCreate = invocations
                 .GetMultParamsOf(nameof(OrganizerServices.ContainTypes));
 
             var acceptedPatterns = typesInfoToCreate
                 .Select(info => info.First());
-            
+
             var ignoredPatterns = typesInfoToCreate
                 .Where(info => info.Count() > 1)
                 .Select(info => info.ElementAt(1));
 
+
+            //throw new System.Exception
+            //    ((from type in types
+            //      from acceptPattern in acceptedPatterns
+            //      where Regex.IsMatch(type.Identifier.Text.ToString(), acceptPattern)
+                  
+            //      from ignorePattern in ignoredPatterns
+            //      where !Regex.IsMatch(type.Identifier.Text.ToString(), ignorePattern)
+            //      select type).Count().ToString()) ;
+
             types
                 .GetTypesToCreateByPatterns(ignoredPatterns , acceptedPatterns)
-                .CreateRequeredTypes(fullTargetPath, context);
+                .CreateRequeredTypes(fullTargetPath);
 
         }
 
         private static void CreateRequeredTypes
             (this IEnumerable<BaseTypeDeclarationSyntax> typesToCreate,
-            string fullTargetPath,
-            GeneratorExecutionContext context)
+            string fullTargetPath)
         {
             foreach (var (type, typePath)
                 in from type in typesToCreate
-                   let typePath = Path.Combine(fullTargetPath, type.Identifier.Text + ".g.cs")
-                   select (type.ToString(), typePath))
+                   let typePath = Path
+                   .Combine(fullTargetPath, type.Identifier.Text + ".g.cs")
+                   .Replace("\\\\", "\\")
+                   .Replace("\\", "\\\\")
+            select (type.ToString(), typePath))
             {
-                context.AddSource(typePath, source: type);
+                File.WriteAllText(typePath, type.ToString());
             }
         }
 
@@ -87,13 +108,17 @@ namespace Organizer.Generator.Services.TypeServices
         {
             var folderPath = node.Value?.Header?
                 .GetSingleParamsOf(nameof(OrganizerServices.CreateFolder))
-                .Last();
-
-            return Path.Combine(targetPath, folderPath);
+                .LastOrDefault();
+            
+            return folderPath is null ? targetPath : 
+                Path.Combine(targetPath, folderPath)
+                .Replace("\\\\", "\\")
+                .Replace("\\", "\\\\"); ;
         }
         private static IEnumerable<InvocationExpressionSyntax> GetPrimaryBlockInvocations
             (this Value value)
         {
+
             var invocations = new string(
                 value
                 .Block
@@ -122,14 +147,12 @@ namespace Organizer.Generator.Services.TypeServices
             (this IEnumerable<BaseTypeDeclarationSyntax> types,
             IEnumerable<string> ignoredPatterns,
             IEnumerable<string> acceptedPatterns)
-            =>  from type in types
-
-                from ignorePattern in ignoredPatterns
-                where !Regex.IsMatch(type.Identifier.Text.ToString(), ignorePattern)
-
-                from acceptPattern in acceptedPatterns
-                where Regex.IsMatch(type.Identifier.Text.ToString(), acceptPattern)
-
-                select type;
+            => types
+            .Where(type =>
+                acceptedPatterns.Any(acceptPattern
+                    => Regex.IsMatch(type.Identifier.Text.ToString(), acceptPattern)))
+            .Where(type =>
+                !ignoredPatterns.Any(ignorePattern
+                    => Regex.IsMatch(type.Identifier.Text.ToString(), ignorePattern)));
     }
 }

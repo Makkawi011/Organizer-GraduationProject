@@ -41,7 +41,7 @@ namespace Organizer.Services
         internal static IEnumerable<IEnumerable<string>> GetMultParamsOf
             (this IEnumerable<InvocationExpressionSyntax> invocations,
             string organizerServiceName)
-        {
+        { 
             return invocations
                 .GetInvocationsByName(organizerServiceName)
                 .Select(invoc => invoc.ArgumentList.Arguments)

@@ -11,7 +11,7 @@ namespace Organizer.Controller
 {
     public static class Servicer
     {
-        public static void ImplementOrganizerServices(this List<Node> nodes ,GeneratorExecutionContext context)
+        public static void ImplementOrganizerServices(this List<Node> nodes)
         {
             var orgCtor = nodes?
                   .GetRoot()?
@@ -24,10 +24,10 @@ namespace Organizer.Controller
                 .Where(node => node.IsLeaf)
                 .CreateForFolders(toDirPath);
 
-            orgCtor?.GetCustomerTypeDeclarationSyntaxes()?
+             orgCtor?.GetCustomerTypeDeclarationSyntaxes()
                 .IgnoreForTypes(orgCtor)
                 .UpdateForTypes(orgCtor)
-                .ContainForTypes(nodes, toDirPath, context);
+                .ContainForTypes(nodes, toDirPath);
 
         }
 

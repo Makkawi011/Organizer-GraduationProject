@@ -1,4 +1,7 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.IO;
+using System.Linq;
+
+using Microsoft.CodeAnalysis;
 
 using Organizer.Controller;
 
@@ -12,14 +15,15 @@ namespace Organizer.Generator
         public void Execute(GeneratorExecutionContext context)
         {
             context
-            .Compilation
-            .SyntaxTrees
-            .GetClasses()?
-            .GetOrganizerClass()
-            .GetOrganizerConstructor()
-            .GetBlockSyntaxes()
-            .BuildFileStructureTree()
-            .ImplementOrganizerServices(context);
+                .Compilation
+                .SyntaxTrees
+                .GetClasses()
+                .GetOrganizerClass()
+                .GetOrganizerConstructor()
+                .GetBlockSyntaxes()
+                .BuildFileStructureTree()
+                .ImplementOrganizerServices();
+
         }
         public void Initialize(GeneratorInitializationContext context)
         {

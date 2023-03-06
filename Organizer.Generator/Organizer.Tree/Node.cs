@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Organizer.Tree
 {
@@ -21,6 +22,7 @@ namespace Organizer.Tree
         internal bool IsParentOf(Node child) 
             => Value.Block.SpanStart < child.Value.Block.SpanStart
             && Value.Block.Span.End > child.Value.Block.Span.End;
+
     }
 }
 

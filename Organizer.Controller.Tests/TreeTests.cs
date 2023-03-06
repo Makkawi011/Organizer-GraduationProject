@@ -12,6 +12,9 @@ public class TreeTests
         string header1 = "ctorHeader();";
         string header2 = "H1();";
         string code = header1 + "{ " + header2 + "{ } }";
+
+        var len = code.Length;
+
         var blocks = CreateBlockSyntaxes(code);
         List<Node> nodes = CreateNodes(blocks);
 
@@ -74,7 +77,8 @@ public class TreeTests
             {
                 Value = new Value()
                 {
-                    Block = blocks.ElementAt(i)
+                    Block = blocks.ElementAt(i),
+                    Header = Enumerable.Empty<InvocationExpressionSyntax>()
                 }
             })
             .ToList();

@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Organizer.Services\Organizer.Services.csproj" />
+    <ProjectReference Include="..\Organizer.Generator\Organizer.Generator.csproj" />
   </ItemGroup>
 
 </Project>

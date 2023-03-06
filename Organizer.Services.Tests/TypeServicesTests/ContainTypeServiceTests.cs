@@ -129,7 +129,10 @@ public class ContainTypeServiceTests
             }
         };
 
-        var expectedFullTargetPath = Path.Combine(targetPath, "CreateFolderPath");
+        var expectedFullTargetPath = Path
+            .Combine(targetPath, "CreateFolderPath")
+            .Replace("\\\\", "\\")
+            .Replace("\\", "\\\\");
 
         //Act
         var method = typeof(ContainTypeServcie)

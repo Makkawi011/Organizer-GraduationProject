@@ -98,7 +98,8 @@ public class BuilderTests
             {
                 Value = new Value()
                 {
-                    Block = blocks.ElementAt(i)
+                    Block = blocks.ElementAt(i),
+                    Header = Enumerable.Empty<InvocationExpressionSyntax>()
                 }
             })
             .ToList();
