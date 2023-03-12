@@ -45,7 +45,10 @@ namespace Organizer.Tree
 
             return nodes;
         }
-        private static List<Node> RefactorNodeInformations(List<Node> nodes)
+        private static List<Node> RefactorNodeInformations(List<Node> nodes) 
+            => AddUpdatedHeaders(nodes);
+
+        private static List<Node> AddUpdatedHeaders(List<Node> nodes)
         {
             var root = nodes.FirstOrDefault();
             var code = root.Value.Block.SyntaxTree.ToString();
@@ -60,17 +63,13 @@ namespace Organizer.Tree
 
                 //update first childe 
                 var firstChild = childrens.First();
-                
+
                 var headerFirstChild = GetHeaderNode(
                         code,
                         parent.Value.Block.SpanStart,
                         firstChild.Value.Block.SpanStart);
 
-                var updatedFirstChild = firstChild.SetHeaderNode(headerFirstChild);
-
-                var indexOfFirstChild = nodes.IndexOf(firstChild);
-                nodes.RemoveAt(indexOfFirstChild);
-                nodes.Insert(indexOfFirstChild, updatedFirstChild);
+                firstChild.SetHeaderNode(headerFirstChild);
 
                 //update rest of childrens ...
                 for (int i = 1; i < childrens.Count; i++)
@@ -87,19 +86,13 @@ namespace Organizer.Tree
                         currentChild.Value.Block.SpanStart);
 
 
-                    var updatedCurrentChild = currentChild.SetHeaderNode(headerCurrentChild);
+                    currentChild.SetHeaderNode(headerCurrentChild);
 
-                    childrens.RemoveAt(i);
-                    childrens.Insert(i, updatedCurrentChild);
-
-
-                    var indexOfCurrentChild = nodes.IndexOf(currentChild);
-                    nodes.RemoveAt(indexOfCurrentChild);
-                    nodes.Insert(indexOfCurrentChild, updatedCurrentChild);
                 }
 
             }
             return nodes;
         }
+
     }
 }

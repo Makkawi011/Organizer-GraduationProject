@@ -1,14 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
-using System.Collections.Generic;
-using System;
-using System.Linq;
-using Organizer.Client;
-using System.IO;
-
-namespace Organizer.Tree
-{
-    internal static class HeaderHandler
+internal static class HeaderHandler
     {
         internal static IEnumerable<InvocationExpressionSyntax> GetHeaderNode(string code, int start, int end)
         {
@@ -82,4 +72,3 @@ namespace Organizer.Tree
             return invocations;
         }
     }
-}

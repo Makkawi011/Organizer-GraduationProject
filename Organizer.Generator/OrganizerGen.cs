@@ -1,17 +1,12 @@
-﻿using System.IO;
-using System.Linq;
-
-using Microsoft.CodeAnalysis;
-
+﻿using Microsoft.CodeAnalysis;
 using Organizer.Controller;
 
 namespace Organizer.Generator
 {
     [Generator]
-#pragma warning disable RS1036 // Specify analyzer banned API enforcement setting
     public class OrganizerGen : ISourceGenerator
-#pragma warning restore RS1036 // Specify analyzer banned API enforcement setting
     {
+        public void Initialize(GeneratorInitializationContext context){ }
         public void Execute(GeneratorExecutionContext context)
         {
             context
@@ -23,10 +18,6 @@ namespace Organizer.Generator
                 .GetBlockSyntaxes()
                 .BuildFileStructureTree()
                 .ImplementOrganizerServices();
-
-        }
-        public void Initialize(GeneratorInitializationContext context)
-        {
         }
     }
 }

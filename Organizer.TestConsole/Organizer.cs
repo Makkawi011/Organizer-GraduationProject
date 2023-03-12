@@ -1,20 +1,22 @@
-﻿using Organizer.Client.Attributes;
-using Organizer.Client;
+﻿using Organizer.Client;
+using Organizer.Client.Attributes;
 
-namespace Organizer.TestConsole
+namespace Organizer.TestConsole;
+
+class Organizer : OrganizerServices
 {
-    class Organizer : OrganizerServices
+    [From("C:\\Users\\a\\Source\\Repos\\Organizer-GraduationProject\\Organizer.Generator\\Organizer.Tree")]
+    [To("C:\\Users\\a\\source\\repos\\Organizer-GraduationProject\\Organizer.TestConsole")]
+    public Organizer()
     {
-        [From("C:\\Users\\a\\Source\\Repos\\Organizer-GraduationProject\\Organizer.Generator\\Organizer.Tree")]
-        [To("C:\\Users\\a\\source\\repos\\Organizer-GraduationProject\\Organizer.TestConsole")]
-        public Organizer()
+        CreateFolder("Path1");
         {
-            CreateFolder("GeneratorResultFile");
+            CreateFolder("Path2");
             {
-                UpdateType("Builder", "Heeed");
-                IgnoreType("HeaderHandler");
-                ContainTypes("H");
-                
+                CreateFolder("Path3");
+                {
+                    //ContainTypes("H");
+                }
             }
         }
     }

@@ -1,16 +1,105 @@
-﻿using System;
-
-using Xunit;
-
-using static System.Reflection.Metadata.BlobBuilder;
+﻿using Organizer.Client;
 
 namespace Organizer.Tree.Tests;
 
 public class HeaderHandlerTests
 {
+    [Fact]
+    public void RefactorCreateFolderPaths_ReturnUpdatedCreateFolderInvocs_When3SeqCreatFolderInvocs()
+    {
+        var headers =GetBlocks("""
+                {
+                CreateFolder("Path1");
+                    {
+                        CreateFolder("Path2");
+                        {
+                            CreateFolder("Path3"); { }
+                        }
+                    }
+                }
+                """);
+
+        var invocations = GetInvocations("""
+            CreateFolder("Path1");
+            CreateFolder("Path2");
+            CreateFolder("Path3");
+            """)
+            .Select(invoc => new InvocationExpressionSyntax[]{invoc});
+
+        var node3 = new Node()
+        {
+            
+            Value = new Value
+            {
+                Block = headers.ElementAt(3),
+                Header = invocations.ElementAt(2)
+            }
+        };
+
+        var node2 = new Node()
+        {
+            Children = new List<Node> { node3 },
+            Value = new Value
+            {
+                Block = headers.ElementAt(2),
+                Header = invocations.ElementAt(1)
+            }
+        };
+        
+        var node1 = new Node()
+        {
+            Children = new List<Node> { node2, node3 },
+            Value = new Value
+            {
+                Block = headers.ElementAt(1),
+                Header =  invocations.First()
+            }
+        };
+
+        var node0 = new Node
+        {
+            Children = new List<Node> { node1, node2, node3 },
+            Value = new Value
+            {
+                Block = headers.First(),
+                Header = Enumerable.Empty<InvocationExpressionSyntax>()
+            },
+            Parent = null
+        };
+        node1.Parent = node0;
+        node2.Parent = node1;
+        node3.Parent = node2;
+
+        var nodes = new List<Node>(){
+            node0,node1,node2,node3
+        };
+
+        // Act
+        var method = typeof(HeaderHandler)
+            .GetMethod("RefactorCreateFolderPaths",
+            BindingFlags.NonPublic |
+            BindingFlags.Static);
+
+        var newInvocations = new List<IEnumerable<InvocationExpressionSyntax>>
+        {
+            Enumerable.Empty<InvocationExpressionSyntax>()
+        };
+
+        for (int i = 0; i < invocations.Count(); i++)
+        {
+            var newInvocation = (IEnumerable<InvocationExpressionSyntax>?)method!
+                .Invoke(null, new object[] { invocations.ElementAt(i), nodes.ElementAt(i).Parent })!;
+            nodes.ElementAt(i).Value.Header = newInvocation;
+
+            newInvocations.Add(newInvocation);
+        }
+
+        var expectedTherdInvoc = nameof(OrganizerServices.CreateFolder) + "(\"Path1\\\\Path2\\\\Path3\")";
+        Assert.Equal(expectedTherdInvoc.ToString(), newInvocations.Last().Last().ToString());
+    }
 
     [Fact]
-    public void RefactorCreateFolderPaths_ReturnsUpdatedNode_WhenAddHeader()
+    public void SetHeaderNode_UpdatedNode_WhenAddHeader()
     {
         // Arrange
         var header = @"CreateFolder(""path1"")";
@@ -40,15 +129,15 @@ public class HeaderHandlerTests
             .OfType<InvocationExpressionSyntax>();
         // Act
 
-        var newNode = oldNode.SetHeaderNode(headerInvocation);
+        oldNode.SetHeaderNode(headerInvocation);
 
         // Assert
 
-        Assert.True(newNode.Value!.Header == headerInvocation);
+        Assert.True(oldNode.Value!.Header == headerInvocation);
     }
 
     [Fact]
-    public void RefactorCreateFolderPaths_ReturnsUpdatedNode_WhenAddMultHeader()
+    public void SetHeaderNode_UpdatedNodeByUpdateHeader_WhenAddMultHeader()
     {
         // Arrange
 
@@ -58,10 +147,9 @@ public class HeaderHandlerTests
         var subFolderPath = "\"path2\"";
         var createSub = @"CreateFolder("+ subFolderPath + ")";
 
-        var fullPath = "path1\\path2";
-
+        var fullPath = "\"path1\\\\path2\"";
         var expectedInvocation = CSharpSyntaxTree
-            .ParseText(nameof(Organizer.Client.OrganizerServices.CreateFolder)+"(\""+fullPath+"\")")
+            .ParseText(nameof(OrganizerServices.CreateFolder)+"("+fullPath+")")
             .GetRoot().DescendantNodes().OfType<InvocationExpressionSyntax>()
             .Single();
 
@@ -78,10 +166,10 @@ public class HeaderHandlerTests
             {
                 Block = blockSyntax.ElementAt(0)
 
-                //header => null  by defult 
+                //header => empty 
             }
         };
-        var newRoot = root.SetHeaderNode(rootHeaderInvocations);
+        root.SetHeaderNode(rootHeaderInvocations);
 
         var node1 = new Node()
         {
@@ -90,13 +178,12 @@ public class HeaderHandlerTests
             {
                 Block = blockSyntax.ElementAt(1)
 
-                //header => null  by defult 
+                //header => empty  
             }
         };
-        newRoot.AppendChild(node1);
+        root.AppendChild(node1);
 
-        var newNode1 = node1.SetHeaderNode(node1HeaderInvocations);
-        newRoot.AppendChild(newNode1);
+        node1.SetHeaderNode(node1HeaderInvocations);
 
         var node2 = new Node()
         {
@@ -105,15 +192,15 @@ public class HeaderHandlerTests
             {
                 Block = blockSyntax.Last()
 
-                //header => null  by defult 
+                //header => empty
             }
         };
-        newNode1.AppendChild(node2);
+        node1.AppendChild(node2);
 
-        var newNode2 = node2.SetHeaderNode(node2HeaderInvocations);
+        node2.SetHeaderNode(node2HeaderInvocations);
 
         // Assert
-        Assert.Equal(expectedInvocation.ToString(), newNode2.Value.Header.Single().ToString());
+        Assert.Equal(expectedInvocation.ToString(), node2.Value.Header.Single().ToString());
     }
     [Fact]
     public void GetNodeHeader_ReturnsNull_WhenNoInvocationsInHeader()

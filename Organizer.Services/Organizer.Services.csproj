@@ -13,5 +13,9 @@
       <_Parameter1>Organizer.Services.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Organizer.Generator\Organizer.Generator.csproj" />
+  </ItemGroup>
   
 </Project>

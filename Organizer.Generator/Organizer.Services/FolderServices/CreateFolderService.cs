@@ -1,14 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
-
-using Organizer.Client;
+﻿using Organizer.Client;
 using Organizer.Tree;
-
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Organizer.Generator.Services.FolderServices
 {
@@ -31,12 +25,10 @@ namespace Organizer.Generator.Services.FolderServices
                     .SingleOrDefault()
                     .GetParameterValue();
 
-
                 var fullPath = Path.Combine(targetPath, path)
                     .Replace("\\\\", "\\")
                     .Replace("\\", "\\\\");
                 
-
                 if (!Directory.Exists(fullPath))
                     Directory.CreateDirectory(fullPath);
             }

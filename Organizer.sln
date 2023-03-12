@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Organizer.Services.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Organizer.Generator", "Organizer.Generator\Organizer.Generator.csproj", "{3E4809EF-0F64-40A9-9144-8A72C5774834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Organizer.Usage", "Organizer.Usage\Organizer.Usage.csproj", "{86C212C7-97DE-4007-AA8A-D2385821BB9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Organizer.Usage", "Organizer.Usage\Organizer.Usage.csproj", "{86C212C7-97DE-4007-AA8A-D2385821BB9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
