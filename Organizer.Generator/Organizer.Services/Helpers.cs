@@ -30,7 +30,7 @@ namespace Organizer.Services
             => invocations.Where(invoc => invoc.IsName(organizerServiceName));
 
         internal static IEnumerable<string> GetSingleParamsOf
-            (this IEnumerable<InvocationExpressionSyntax> invocations,
+            (this IEnumerable<InvocationExpressionSyntax> invocations, 
             string organizerServiceName)
         {
             return invocations

@@ -68,7 +68,7 @@ public class BuilderTests
 
         var builder = new Builder();
         var method = typeof(Builder)
-            .GetMethod("RefactorNodeInformations", BindingFlags.NonPublic | BindingFlags.Static);
+            .GetMethod("RefactorInfos", BindingFlags.NonPublic | BindingFlags.Static);
         var actualNodes = (List<Node>?)method!.Invoke(builder, new[] { nodes });
 
         // Assert

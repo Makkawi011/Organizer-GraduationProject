@@ -8,9 +8,7 @@ namespace Organizer.Generator.Services.FolderServices
 {
     public static class CreateFolderService
     {
-        public static void CreateForFolders
-            (this IEnumerable<Node> leafs,
-            string targetPath)
+        public static void CreateForFolders(this IEnumerable<Node> leafs, string targetPath)
         {
             targetPath = targetPath
                 .Replace("\\\\", "\\")

@@ -22,7 +22,6 @@ namespace Organizer.Tree
         internal bool IsParentOf(Node child) 
             => Value.Block.SpanStart < child.Value.Block.SpanStart
             && Value.Block.Span.End > child.Value.Block.Span.End;
-
     }
 }
 

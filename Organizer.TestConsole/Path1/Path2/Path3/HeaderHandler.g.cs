@@ -20,7 +20,6 @@ internal static class HeaderHandler
         {
             //header is new information
             node.Value.Header = RefactorCreateFolderPaths(orginalHeader, node.Parent);
-            
         }
 
         private static IEnumerable<InvocationExpressionSyntax> RefactorCreateFolderPaths

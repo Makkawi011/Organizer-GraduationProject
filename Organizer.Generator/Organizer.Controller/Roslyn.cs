@@ -21,8 +21,8 @@ namespace Organizer.Controller
 
         public static IEnumerable<BlockSyntax> GetBlockSyntaxes(this ConstructorDeclarationSyntax organizerConstructor)
             => organizerConstructor?
-            .DescendantNodes()
-            .OfType<BlockSyntax>();
+                .DescendantNodes()
+                .OfType<BlockSyntax>();
 
 
         public static ConstructorDeclarationSyntax GetOrganizerConstructor(this ClassDeclarationSyntax organizerClass) 
@@ -33,12 +33,12 @@ namespace Organizer.Controller
 
         internal static ConstructorDeclarationSyntax GetOrganizerConstructor(this Node root)
             => root
-            .Value
-            .Block
-            .SyntaxTree
-            .GetClasses()
-            .GetOrganizerClass()
-            .GetOrganizerConstructor();
+                .Value
+                .Block
+                .SyntaxTree
+                .GetClasses()
+                .GetOrganizerClass()
+                .GetOrganizerConstructor();
 
     }
 }

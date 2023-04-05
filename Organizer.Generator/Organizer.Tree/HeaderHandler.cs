@@ -30,7 +30,6 @@ namespace Organizer.Tree
         {
             //header is new information
             node.Value.Header = RefactorCreateFolderPaths(orginalHeader, node.Parent);
-            
         }
 
         private static IEnumerable<InvocationExpressionSyntax> RefactorCreateFolderPaths

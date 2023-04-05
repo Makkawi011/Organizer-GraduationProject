@@ -87,5 +87,4 @@ namespace Organizer.Generator.Services.TypeServices
         }
 
     }
-
 }

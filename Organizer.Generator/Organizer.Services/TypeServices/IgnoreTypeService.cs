@@ -43,6 +43,5 @@ namespace Organizer.Generator.Services.TypeServices
             where ! ignoredPatterns.Any(ignrPtrn => typeName.Contains(ignrPtrn))
             select type;
 
-
     }
 }

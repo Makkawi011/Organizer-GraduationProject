@@ -5,12 +5,10 @@ using Organizer.Client;
 using Organizer.Services;
 using Organizer.Tree;
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
 
 namespace Organizer.Generator.Services.TypeServices
 {
@@ -72,16 +70,6 @@ namespace Organizer.Generator.Services.TypeServices
                 .Where(info => info.Count() > 1)
                 .Select(info => info.ElementAt(1));
 
-
-            //throw new System.Exception
-            //    ((from type in types
-            //      from acceptPattern in acceptedPatterns
-            //      where Regex.IsMatch(type.Identifier.Text.ToString(), acceptPattern)
-                  
-            //      from ignorePattern in ignoredPatterns
-            //      where !Regex.IsMatch(type.Identifier.Text.ToString(), ignorePattern)
-            //      select type).Count().ToString()) ;
-
             types
                 .GetTypesToCreateByPatterns(ignoredPatterns , acceptedPatterns)
                 .CreateRequeredTypes(fullTargetPath);
@@ -98,7 +86,7 @@ namespace Organizer.Generator.Services.TypeServices
                    .Combine(fullTargetPath, type.Identifier.Text + ".g.cs")
                    .Replace("\\\\", "\\")
                    .Replace("\\", "\\\\")
-            select (type.ToString(), typePath))
+            select (type, typePath))
             {
                 File.WriteAllText(typePath, type.ToString());
             }

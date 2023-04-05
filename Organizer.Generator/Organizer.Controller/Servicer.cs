@@ -15,8 +15,8 @@ namespace Organizer.Controller
         public static void ImplementOrganizerServices(this List<Node> nodes)
         {
             var orgCtor = nodes?
-                  .GetRoot()?
-                  .GetOrganizerConstructor();
+                .GetRoot()?
+                .GetOrganizerConstructor();
 
             var toDirPath = orgCtor?
                 .GetTargetDirectoryPath();

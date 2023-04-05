@@ -27,8 +27,8 @@ public static class Helpers
       
         public static string GetParameterValue(this ArgumentSyntax arg)
             => arg.ToString()
-            .Replace("\"", string.Empty)
-            .Replace(" ", string.Empty)
-            .Replace("nameof(", string.Empty)
-            .Replace(")", string.Empty);
+                .Replace("\"", string.Empty)
+                .Replace(" ", string.Empty)
+                .Replace("nameof(", string.Empty)
+                .Replace(")", string.Empty);
     }
