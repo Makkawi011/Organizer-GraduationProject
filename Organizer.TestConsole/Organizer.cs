@@ -5,8 +5,8 @@ namespace Organizer.TestConsole;
 
 class Organizer : OrganizerServices
 {
-    [From("C:\\Users\\a\\Source\\Repos\\Organizer-GraduationProject\\Organizer.Generator\\Organizer.Tree")]
-    [To("C:\\Users\\a\\source\\repos\\Organizer-GraduationProject\\Organizer.TestConsole")]
+    [From("C:\\Users\\a\\Source\\Repos\\Organizer\\Organizer.Generator\\Organizer.Tree")]
+    [To("C:\\Users\\a\\source\\repos\\Organizer\\Organizer.TestConsole")]
     public Organizer()
     {
         CreateFolder("Path1");
@@ -15,7 +15,7 @@ class Organizer : OrganizerServices
             {
                 CreateFolder("Path3");
                 {
-                    //ContainTypes("H");
+                    ContainTypes("H");
                 }
             }
         }
