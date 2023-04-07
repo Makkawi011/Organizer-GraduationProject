@@ -16,7 +16,7 @@ namespace Organizer.Controller
                 .GetRoot()
                 .DescendantNodes()
                 .OfType<ClassDeclarationSyntax>();
-        public static ClassDeclarationSyntax GetOrganizerClass(this IEnumerable<ClassDeclarationSyntax> classes) 
+        public static ClassDeclarationSyntax FindOrganizerClass(this IEnumerable<ClassDeclarationSyntax> classes) 
             => classes.FirstOrDefault(@class => @class.BaseList.Types.Any(t => t.Type.ToString() == nameof(OrganizerServices)));
 
         public static IEnumerable<BlockSyntax> GetBlockSyntaxes(this ConstructorDeclarationSyntax organizerConstructor)
@@ -25,20 +25,20 @@ namespace Organizer.Controller
                 .OfType<BlockSyntax>();
 
 
-        public static ConstructorDeclarationSyntax GetOrganizerConstructor(this ClassDeclarationSyntax organizerClass) 
+        public static ConstructorDeclarationSyntax FindOrganizerConstructor(this ClassDeclarationSyntax organizerClass) 
             => organizerClass?
                 .DescendantNodes()
                 .OfType<ConstructorDeclarationSyntax>()
                 .SingleOrDefault();
 
-        internal static ConstructorDeclarationSyntax GetOrganizerConstructor(this Node root)
+        internal static ConstructorDeclarationSyntax FindOrganizerConstructor(this Node root)
             => root
                 .Value
                 .Block
                 .SyntaxTree
                 .GetClasses()
-                .GetOrganizerClass()
-                .GetOrganizerConstructor();
+                .FindOrganizerClass()
+                .FindOrganizerConstructor();
 
     }
 }

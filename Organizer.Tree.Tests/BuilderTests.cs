@@ -49,7 +49,7 @@ public class BuilderTests
     }
 
     [Fact]
-    public void RefactorNodeInformations_ReturnsCollectionOfConnectedNodesWithFillHeadersInValueOfNodes()
+    public void RefactorInfos_ReturnsCollectionOfConnectedNodesWithFillHeadersInValueOfNodes()
     {
         // Arrange
         string header1 = "H0()";
@@ -58,9 +58,10 @@ public class BuilderTests
         var blocks = CreateBlockSyntaxes(code);
         List<Node> nodes = CreateNodes(blocks);
 
-        nodes.Last().AppendChild(nodes.First()); //first => child of the last => parent
+        nodes.First().Parent = nodes.Last();
         nodes.Last().Value!.Header = GetInvocs(header2);
         nodes.First().Value!.Header = GetInvocs(header1);
+        nodes.Reverse();
 
         var expectedNodes = nodes.ToList();
 

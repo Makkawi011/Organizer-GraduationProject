@@ -17,7 +17,7 @@ public class RoslynTests
             .First();
 
         // Act
-        var actualOrganizerCtor = organizerClss.GetOrganizerConstructor()!;
+        var actualOrganizerCtor = organizerClss.FindOrganizerConstructor()!;
 
         // Assert
 
@@ -38,7 +38,7 @@ public class RoslynTests
         var node = CreateNode(organizerClss);
 
         // Act
-        var actualOrganizerCtor = node.GetOrganizerConstructor()!;
+        var actualOrganizerCtor = node.FindOrganizerConstructor()!;
 
         // Assert
 
@@ -138,7 +138,7 @@ public class RoslynTests
         var expectedClass = classes.First();
 
         // Act
-        var actualClass = classes.GetOrganizerClass();
+        var actualClass = classes.FindOrganizerClass();
 
         // Assert
         Assert.Equal(expectedClass, actualClass);

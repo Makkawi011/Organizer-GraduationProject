@@ -13,8 +13,8 @@ namespace Organizer.Generator
                 .Compilation
                 .SyntaxTrees
                 .GetClasses()
-                .GetOrganizerClass()
-                .GetOrganizerConstructor()
+                .FindOrganizerClass()
+                .FindOrganizerConstructor()
                 .GetBlockSyntaxes()
                 .BuildFileStructureTree()
                 .ImplementOrganizerServices();

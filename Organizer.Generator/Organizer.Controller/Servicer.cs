@@ -16,7 +16,7 @@ namespace Organizer.Controller
         {
             var orgCtor = nodes?
                 .GetRoot()?
-                .GetOrganizerConstructor();
+                .FindOrganizerConstructor();
 
             var toDirPath = orgCtor?
                 .GetTargetDirectoryPath();
