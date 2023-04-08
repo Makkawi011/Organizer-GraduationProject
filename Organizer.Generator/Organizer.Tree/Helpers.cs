@@ -21,15 +21,13 @@ namespace Organizer.Tree
         }
         public static bool IsName(this InvocationExpressionSyntax invocation, string InvocationName)
             => invocation.GetName().Equals(InvocationName);
-        private static string GetName(this InvocationExpressionSyntax invocation)
-        {
-            return ((IdentifierNameSyntax)invocation.Expression)
+        private static string GetName(this InvocationExpressionSyntax invocation) 
+            => ((IdentifierNameSyntax)invocation.Expression)
                 .Identifier
                 .ValueText
                 .ToString();
-        }
 
-      
+
         public static string GetParameterValue(this ArgumentSyntax arg)
             => arg.ToString()
                 .Replace("\"", string.Empty)

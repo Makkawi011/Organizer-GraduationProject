@@ -21,17 +21,11 @@ namespace Organizer.Generator.Services.TypeServices
         {
             if (nodes is null) return;
 
-            string paths = string.Empty;
-            int x = 0;
-
             foreach ((Node node, string fullTargetPath)
                 in from node in nodes
                    let fullTargetPath = GetFullTargetPath(targetPath, node)
                    select (node, fullTargetPath))
             {
-                paths += x++ + "=>" + fullTargetPath;
-                if (x == 1) continue;
-
                 node.Value
                     .GetPrimaryBlockInvocations()
                     .ContainForTypesByName(types, fullTargetPath)
@@ -88,7 +82,7 @@ namespace Organizer.Generator.Services.TypeServices
                    .Replace("\\", "\\\\")
             select (type, typePath))
             {
-                File.WriteAllText(typePath, type.ToString());
+                File.WriteAllText(typePath, contents: type.SyntaxTree.ToString());
             }
         }
 

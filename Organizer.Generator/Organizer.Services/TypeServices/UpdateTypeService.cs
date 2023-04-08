@@ -34,9 +34,9 @@ namespace Organizer.Generator.Services.TypeServices
                 .GetMultParamsOf(nameof(OrganizerServices.UpdateType));
 
             var updatedTypes = types
-                .Select(type => type.ToString())
+                .Select(type => type.RefactoreToString())
                 .Select(type => UpdaterByTypeName(type, updatedTypesByName))
-                .Select(type => Organizer.Services.Helpers.ConvertToBaseTypeDeclarationSyntax(type));
+                .Select(type => Helpers.ConvertToBaseTypeDeclarationSyntax(type));
 
             return updatedTypes;
         }
@@ -49,9 +49,9 @@ namespace Organizer.Generator.Services.TypeServices
                 .ToUpdatedTypesNames(types);
 
             var updatedTypes = types
-                .Select(type => type.ToString())
+                .Select(type => type.RefactoreToString())
                 .Select(type => UpdaterByTypeName(type, updatedTypesByName))
-                .Select(type => Organizer.Services.Helpers.ConvertToBaseTypeDeclarationSyntax(type));
+                .Select(type => Helpers.ConvertToBaseTypeDeclarationSyntax(type));
 
 
             return updatedTypes;

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -47,5 +48,39 @@ namespace Organizer.Services
                 .Select(invoc => invoc.ArgumentList.Arguments)
                 .Select(args => args.Select(arg => arg.GetParameterValue()));
         }
+        /// <summary>
+        /// convert BaseTypeDeclarationSyntax to string 
+        /// then add to this string 
+        /// the namespace declaration and the using directives
+        /// </summary>
+        /// <param name="type">ClassDeclarationSyntax or StructDeclarationSyntax or EnumDeclarationSyntax</param>
+        /// <returns>string contain : using directives then the namespace declaration have the input type declaration</returns>
+        internal static string RefactoreToString(this BaseTypeDeclarationSyntax type)
+        {
+            var nodes = type
+                .Parent
+                .SyntaxTree
+                .GetRoot()
+                .DescendantNodes();
+
+            var namespaceName = nodes
+                .OfType<NamespaceDeclarationSyntax>()
+                .FirstOrDefault()?
+                .Name;
+
+            var usings = string.Join("\n",
+                nodes
+                .OfType<UsingDirectiveSyntax>()
+                .Select(@using => @using.ToString()));
+
+            return namespaceName is null 
+                ? Normailze(string.Concat(usings , type))
+                : Normailze(string.Concat(usings, " namespace ", namespaceName, " {", type, " }"));
+        }
+        internal static string Normailze(string code) 
+            => CSharpSyntaxTree.ParseText(code)
+                .GetRoot()
+                .NormalizeWhitespace()
+                .ToString();
     }
 }
