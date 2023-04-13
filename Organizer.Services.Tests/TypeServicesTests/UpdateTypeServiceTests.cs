@@ -84,6 +84,7 @@ public class UpdateTypeServiceTests
             class Class1 { NewClass class2 = new(); }
             """)
             .GetRoot()
+            .NormalizeWhitespace()
             .DescendantNodes()
             .OfType<BaseTypeDeclarationSyntax>();
 
@@ -132,6 +133,7 @@ public class UpdateTypeServiceTests
             class Class1 { NewClass class2 = new(); }
             """)
             .GetRoot()
+            .NormalizeWhitespace()
             .DescendantNodes()
             .OfType<BaseTypeDeclarationSyntax>();
 
@@ -180,11 +182,11 @@ public class UpdateTypeServiceTests
             class NewClass1 { NewClass class2 = new(); }
             """)
             .GetRoot()
+            .NormalizeWhitespace()
             .DescendantNodes()
             .OfType<BaseTypeDeclarationSyntax>();
 
-        var ctor = CSharpSyntaxTree
-            .ParseText("""
+        var ctor = CSharpSyntaxTree.ParseText("""
             class Clss
             {
                 public Clss()
@@ -194,8 +196,7 @@ public class UpdateTypeServiceTests
                     UpdateType(nameof(Class1), "NewClass1");
                 }
             }
-            """)
-            .GetRoot()
+            """).GetRoot()
             .DescendantNodes()
             .OfType<ConstructorDeclarationSyntax>()
             .First();

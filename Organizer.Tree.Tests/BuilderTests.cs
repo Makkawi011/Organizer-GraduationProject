@@ -15,7 +15,7 @@ public class BuilderTests
 
         var builder =  new Builder();
         var method = typeof(Builder)
-            .GetMethod("BuildNodes", BindingFlags.NonPublic | BindingFlags.Static);
+            .GetMethod("BuildNodesByDescending", BindingFlags.NonPublic | BindingFlags.Static);
         var actualNodes = (List<Node>?) method!.Invoke(builder, new[] { blocks });
 
         // Assert

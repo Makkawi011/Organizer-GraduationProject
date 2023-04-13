@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Organizer.Tree
 {
     public sealed class Node
     {
         public Value Value { get; set; }
-        public List<Node> Children { get; set; } = new List<Node>();
+        public List<Node> Children { get; set; } = Enumerable.Empty<Node>().ToList();
         public Node Parent { get; set; }
 
 

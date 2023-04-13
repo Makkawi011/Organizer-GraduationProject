@@ -9,28 +9,26 @@ namespace Organizer.Tree
     public sealed class Builder
     {
         public static List<Node> BuildTree(IEnumerable<BlockSyntax> blocks)
-            => blocks is null ? null : RefactorInfos(BuildEdges(BuildNodes(blocks)));
+            => blocks is null ? null : RefactorInfos(BuildEdges(BuildNodesByDescending(blocks)));
 
 
 
-        private static List<Node> BuildNodes(IEnumerable<BlockSyntax> blocks)
+        private static List<Node> BuildNodesByDescending(IEnumerable<BlockSyntax> blocks)
         {
             var nodes = new List<Node>();
 
-            foreach (var block in blocks)
+            for (int i = blocks.Count() - 1; i >= 0; i--)
             {
                 var node = new Node()
                 {
                     Value = new Value()
                     {
-                        Block = block,
-                        Header = Enumerable.Empty<InvocationExpressionSyntax>()
+                        Block = blocks.ElementAt(i)
                     }
                 };
 
-                nodes.Insert(0, node);
+                nodes.Add(node);
             }
-
             return nodes;
         }
         private static List<Node> BuildEdges(List<Node> nodes)
@@ -94,15 +92,15 @@ namespace Organizer.Tree
             //update rest of childrens ...
             for (int i = 1; i < childrens.Count; i++)
             {
-                //priveus child 
-                var priveusChild = childrens[i - 1];
+                //previous child
+                var previousChild = childrens[i - 1];
                 //update current child
                 var currentChild = childrens[i];
 
 
                 var headerCurrentChild = GetHeaderNode(
                     code,
-                    priveusChild.Value.Block.Span.End,
+                    previousChild.Value.Block.Span.End,
                     currentChild.Value.Block.SpanStart);
 
 
