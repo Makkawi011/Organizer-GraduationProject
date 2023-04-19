@@ -11,7 +11,6 @@ namespace Organizer.Controller
 {
     internal static class Files
     {
-
         internal static string GetTargetDirectoryPath(this ConstructorDeclarationSyntax ctor)
         {
             var toPath = ctor
@@ -28,6 +27,7 @@ namespace Organizer.Controller
                 .GetPaths()
                 .GetFilesContents()
                 .GetBaseTypeSyntaxes();
+
         internal static IEnumerable<BaseTypeDeclarationSyntax> GetTypeDeclarationSyntaxesFrom(string code)
             => CSharpSyntaxTree.ParseText(code)
             .GetRoot()
@@ -71,7 +71,5 @@ namespace Organizer.Controller
             .GetRoot()
             .DescendantNodes()
             .OfType<BaseTypeDeclarationSyntax>();
-
-
     }
 }

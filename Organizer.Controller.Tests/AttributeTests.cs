@@ -3,9 +3,9 @@
 public class AttributeTests
 {
     [Theory]
-    [InlineData(typeof(From),nameof(From),3)]
-    [InlineData(typeof(To),nameof(To),1)]
-    public void GetAttributes_ReturnsAttributeSyntaxCollection(Type attType , string attName , int attNumber)
+    [InlineData(typeof(From), nameof(From), 3)]
+    [InlineData(typeof(To), nameof(To), 1)]
+    public void GetAttributes_ReturnsAttributeSyntaxCollection(Type attType, string attName, int attNumber)
     {
         // Arrange
 
@@ -15,9 +15,7 @@ public class AttributeTests
             [From(""\\FromPath1"")]
             [From(""\\FromPath2"")]
             [From(""\\FromPath3"")]
-
             [To(""\\ToPath"")]
-
             public Organizer()
             {
             }
@@ -27,13 +25,11 @@ public class AttributeTests
             .OfType<ConstructorDeclarationSyntax>()
             .First();
 
-
         // Act
         var fromAttributes = organizerCtor.GetAttributes(attType);
 
         // Assert
         Assert.True(fromAttributes.Count() == attNumber);
         Assert.True(fromAttributes.All(att => att.Name.ToString().Equals(attName)));
-
     }
 }

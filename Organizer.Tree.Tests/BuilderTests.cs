@@ -13,14 +13,14 @@ public class BuilderTests
 
         // Act
 
-        var builder =  new Builder();
+        var builder = new Builder();
         var method = typeof(Builder)
             .GetMethod("BuildNodesByDescending", BindingFlags.NonPublic | BindingFlags.Static);
-        var actualNodes = (List<Node>?) method!.Invoke(builder, new[] { blocks });
+        var actualNodes = (List<Node>?)method!.Invoke(builder, new[] { blocks });
 
         // Assert
 
-        Assert.Equivalent(expectedNodes , actualNodes);
+        Assert.Equivalent(expectedNodes, actualNodes);
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class BuilderTests
         // Arrange
         string header1 = "H0()";
         string header2 = "H1()";
-        string code = header1 + "{ "+ header2 + "{ } }";
+        string code = header1 + "{ " + header2 + "{ } }";
         var blocks = CreateBlockSyntaxes(code);
         List<Node> nodes = CreateNodes(blocks);
 
@@ -76,7 +76,9 @@ public class BuilderTests
 
         Assert.Equivalent(expectedNodes, actualNodes);
     }
+
     #region Helpers
+
     private static IEnumerable<BlockSyntax> CreateBlockSyntaxes(string code)
     {
         return CSharpSyntaxTree
@@ -85,12 +87,14 @@ public class BuilderTests
              .DescendantNodes()
              .OfType<BlockSyntax>();
     }
+
     private static List<Node> CreateNodeDescending(IEnumerable<BlockSyntax> blocks)
     {
         var nodes = CreateNodes(blocks);
         nodes.Reverse();
         return nodes;
     }
+
     private static List<Node> CreateNodes(IEnumerable<BlockSyntax> blocks)
     {
         return Enumerable.Range(0, blocks.Count())
@@ -105,6 +109,7 @@ public class BuilderTests
             })
             .ToList();
     }
+
     private static IEnumerable<InvocationExpressionSyntax> GetInvocs(string header)
     {
         return CSharpSyntaxTree
@@ -113,5 +118,6 @@ public class BuilderTests
              .DescendantNodes()
              .OfType<InvocationExpressionSyntax>();
     }
-    #endregion
+
+    #endregion Helpers
 }

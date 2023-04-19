@@ -1,5 +1,4 @@
-﻿
-Console.WriteLine();
+﻿Console.WriteLine();
 /*
  <!-- Add this as a new ItemGroup, replacing paths and names appropriately -->
 <ItemGroup>

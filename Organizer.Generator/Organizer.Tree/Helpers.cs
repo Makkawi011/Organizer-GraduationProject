@@ -1,5 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
+﻿using System;
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Organizer.Tree
 {
@@ -19,14 +20,15 @@ namespace Organizer.Tree
 
             return depth + 1;
         }
+
         public static bool IsName(this InvocationExpressionSyntax invocation, string InvocationName)
             => invocation.GetName().Equals(InvocationName);
-        private static string GetName(this InvocationExpressionSyntax invocation) 
+
+        private static string GetName(this InvocationExpressionSyntax invocation)
             => ((IdentifierNameSyntax)invocation.Expression)
                 .Identifier
                 .ValueText
                 .ToString();
-
 
         public static string GetParameterValue(this ArgumentSyntax arg)
             => arg.ToString()

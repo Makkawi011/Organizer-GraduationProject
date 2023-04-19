@@ -7,7 +7,6 @@ public class TreeTests
     [Fact]
     public void BuildFileStructureTree_ReturnsListOfNodes_WhenInputCollectionOfBlocks()
     {
-
         // Arrange
         string header1 = "ctorHeader();";
         string header2 = "H1();";
@@ -37,7 +36,6 @@ public class TreeTests
         Assert.Equivalent(expectedNodes.First().Parent, actualNodes.First().Parent);
         Assert.Equivalent(expectedNodes.Last().Value!.Block, actualNodes.Last().Value!.Block);
         Assert.Equivalent(expectedNodes.First().Value!.Header, actualNodes.First().Value!.Header);
-
     }
 
     [Fact]
@@ -49,7 +47,6 @@ public class TreeTests
         List<Node> nodes = CreateNodes(blocks);
         nodes.First().AppendChild(nodes.Last());
 
-
         var expectedRoot = nodes.First();
 
         // Act
@@ -60,6 +57,7 @@ public class TreeTests
     }
 
     #region Helpers
+
     private static IEnumerable<BlockSyntax> CreateBlockSyntaxes(string code)
     {
         return CSharpSyntaxTree
@@ -83,5 +81,6 @@ public class TreeTests
             })
             .ToList();
     }
-    #endregion
+
+    #endregion Helpers
 }

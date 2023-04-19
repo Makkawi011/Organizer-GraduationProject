@@ -13,7 +13,7 @@ public class UpdateTypeServiceTests
         };
 
         var expectedType = "class Class1 { NewClass class2 = new(); }";
-        
+
         // Act
         var method = typeof(UpdateTypeService)
             .GetMethod("UpdaterByTypeName",
@@ -22,10 +22,9 @@ public class UpdateTypeServiceTests
 
         var actualType = (string?)method!
             .Invoke(null, new object[] { oldType, updateParameters })!;
-        
+
         // Assert
         Assert.Equal(expectedType, actualType);
-
     }
 
     [Fact]
@@ -62,7 +61,6 @@ public class UpdateTypeServiceTests
 
         // Assert
         Assert.Equivalent(updateParametersNamesExpected, updateParametersNamesActual);
-
     }
 
     [Fact]
@@ -104,14 +102,13 @@ public class UpdateTypeServiceTests
             BindingFlags.Static);
 
         var newTypesActual = (IEnumerable<BaseTypeDeclarationSyntax>?)method!
-            .Invoke(null, new object[] {oldTypes , invocations })!;
+            .Invoke(null, new object[] { oldTypes, invocations })!;
 
         // Assert
         Assert.Equivalent(
             newTypesExpected.Select(t => t.ToString()),
             newTypesActual.Select(t => t.ToString())
             );
-
     }
 
     [Fact]
@@ -160,7 +157,6 @@ public class UpdateTypeServiceTests
             newTypesExpected.Select(t => t.ToString()),
             newTypesActual.Select(t => t.ToString())
             );
-
     }
 
     [Fact]

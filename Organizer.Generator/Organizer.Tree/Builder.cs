@@ -1,6 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using static Organizer.Tree.HeaderHandler;
 
@@ -10,8 +11,6 @@ namespace Organizer.Tree
     {
         public static List<Node> BuildTree(IEnumerable<BlockSyntax> blocks)
             => blocks is null ? null : RefactorInfos(BuildEdges(BuildNodesByDescending(blocks)));
-
-
 
         private static List<Node> BuildNodesByDescending(IEnumerable<BlockSyntax> blocks)
         {
@@ -31,6 +30,7 @@ namespace Organizer.Tree
             }
             return nodes;
         }
+
         private static List<Node> BuildEdges(List<Node> nodes)
         {
             foreach (var node in nodes)
@@ -44,14 +44,15 @@ namespace Organizer.Tree
 
             return nodes;
         }
-        private static List<Node> RefactorInfos(List<Node> nodes) 
+
+        private static List<Node> RefactorInfos(List<Node> nodes)
             => AddUpdatedHeaders(nodes);
 
-
         #region Add Updated Headers Functions
+
         private static List<Node> AddUpdatedHeaders(List<Node> nodes)
         {
-            var root = nodes.FirstOrDefault(n=> n.Parent is null);
+            var root = nodes.FirstOrDefault(n => n.Parent is null);
             var code = root.Value.Block.SyntaxTree.ToString();
 
             var depth = Helpers.MaxDepthStartingFrom(root);
@@ -61,22 +62,22 @@ namespace Organizer.Tree
                 if (parent is null) continue;
 
                 AddUpdatedHeadersToChildsOf(parent, code);
-
             }
             return nodes;
         }
 
         private static void AddUpdatedHeadersToChildsOf(Node parent, string code)
         {
-            //update first childe 
+            //update first childe
             AddUpdatedHeaderToFirstChildOf(parent, code);
 
             //update rest of childrens ...
             AddUpdatedHeadersToRestChildsOf(parent.Children, code);
         }
-        private static void AddUpdatedHeaderToFirstChildOf(Node parent , string code)
+
+        private static void AddUpdatedHeaderToFirstChildOf(Node parent, string code)
         {
-            //update first childe 
+            //update first childe
             var firstChild = parent.Children.First();
 
             var headerFirstChild = GetHeaderNode(
@@ -86,7 +87,8 @@ namespace Organizer.Tree
 
             firstChild.SetHeaderNode(headerFirstChild);
         }
-        private static void AddUpdatedHeadersToRestChildsOf(List<Node> childrens ,string code)
+
+        private static void AddUpdatedHeadersToRestChildsOf(List<Node> childrens, string code)
         {
             //first Child we handled resently ...
             //update rest of childrens ...
@@ -97,18 +99,15 @@ namespace Organizer.Tree
                 //update current child
                 var currentChild = childrens[i];
 
-
                 var headerCurrentChild = GetHeaderNode(
                     code,
                     previousChild.Value.Block.Span.End,
                     currentChild.Value.Block.SpanStart);
 
-
                 currentChild.SetHeaderNode(headerCurrentChild);
-
             }
         }
 
-        #endregion
+        #endregion Add Updated Headers Functions
     }
 }

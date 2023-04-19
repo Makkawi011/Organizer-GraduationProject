@@ -89,9 +89,8 @@ public class FilesTests
         var actualContent = (IEnumerable<string>?)method!
             .Invoke(null, new[] { paths });
 
-        //Assert 
-        Assert.Equal(expectedContent , actualContent!.Single());
-
+        //Assert
+        Assert.Equal(expectedContent, actualContent!.Single());
     }
 
     [Fact]
@@ -104,7 +103,6 @@ public class FilesTests
 
         string path = Path.GetDirectoryName(currentFilePath)!;
 
-
         //Act
         var method = typeof(Files)
             .GetMethod("GetCSFilesPaths",
@@ -114,10 +112,10 @@ public class FilesTests
         var actualPaths = (IEnumerable<string>?)method!
             .Invoke(null, new[] { path })!;
 
-        //Assert 
+        //Assert
         Assert.Contains(actualPaths, p => p == currentFilePath);
-
     }
+
     [Fact]
     public void GetPath_ReturnsPath_TheInputAttributeHasCurrentFilePath()
     {
@@ -139,13 +137,13 @@ public class FilesTests
             BindingFlags.NonPublic |
             BindingFlags.Static);
 
-        var actualPath = (string) method!
+        var actualPath = (string)method!
             .Invoke(null, new[] { attributeSyntax })!;
 
-        //Assert 
-        Assert.Equal(actualPath , currentFilePath);
-
+        //Assert
+        Assert.Equal(actualPath, currentFilePath);
     }
+
     [Fact]
     public void GetPaths_ReturnsStringPathsCollection_TheInputAttributesHasCurrentDirectoryPath()
     {
@@ -171,9 +169,8 @@ public class FilesTests
         var actualPaths = (IEnumerable<string>?)method
             .Invoke(null, new[] { attributeSyntax })!;
 
-        //Assert 
+        //Assert
         Assert.Contains(actualPaths, p => p == currentFilePath);
-
     }
 
     [Fact]
@@ -184,13 +181,12 @@ public class FilesTests
             .GetFrame(0)!
             .GetFileName()!;
 
-        string currentDirectory = "\""+ Path.GetDirectoryName(currentFilePath) +"\"";
+        string currentDirectory = "\"" + Path.GetDirectoryName(currentFilePath) + "\"";
 
-        
         var organizerCtor = CSharpSyntaxTree.ParseText(@"
         class Organizer : OrganizerServices
         {
-            [From("+$"{currentDirectory})]" +
+            [From(" + $"{currentDirectory})]" +
             "public Organizer()" +
             "{" +
             "}" +
@@ -205,12 +201,12 @@ public class FilesTests
         var actualtypes = organizerCtor
             .GetCustomerTypeDeclarationSyntaxes()!;
 
-        //Assert 
+        //Assert
         Assert.Contains(actualtypes
             .Select(t => t.Identifier.Text)
             , name => name == nameof(FilesTests));
-
     }
+
     [Fact]
     public void GetTargetDirectoryPath_Returnsstring_TheInputAttributesHasCurrentDirectoryPath()
     {
@@ -221,11 +217,10 @@ public class FilesTests
 
         string currentDirectory = Path.GetDirectoryName(currentFilePath)!;
 
-
         var organizerCtor = CSharpSyntaxTree.ParseText(@"
         class Organizer : OrganizerServices
         {
-            [To(" + "\""+ $"{currentDirectory}"+"\")]"+
+            [To(" + "\"" + $"{currentDirectory}" + "\")]" +
             "public Organizer()" +
             "{" +
             "}" +
@@ -238,9 +233,7 @@ public class FilesTests
         //Act
         var actualpath = organizerCtor.GetTargetDirectoryPath();
 
-        //Assert 
-        Assert.Equal(actualpath,currentDirectory);
-
+        //Assert
+        Assert.Equal(actualpath, currentDirectory);
     }
-
 }

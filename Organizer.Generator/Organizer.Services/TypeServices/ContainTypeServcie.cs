@@ -1,14 +1,16 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Organizer.Client;
-using Organizer.Services;
-using Organizer.Tree;
-
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+using Organizer.Client;
+using Organizer.Services;
+using Organizer.Tree;
 
 namespace Organizer.Generator.Services.TypeServices
 {
@@ -30,21 +32,18 @@ namespace Organizer.Generator.Services.TypeServices
                     .GetPrimaryBlockInvocations()
                     .ContainForTypesByName(types, fullTargetPath)
                     .ContainForTypesByPattern(types, fullTargetPath);
-
             }
-
         }
 
         public static IEnumerable<InvocationExpressionSyntax> ContainForTypesByName
            (this IEnumerable<InvocationExpressionSyntax> invocations,
            IEnumerable<BaseTypeDeclarationSyntax> types,
            string fullTargetPath)
-        { 
+        {
             invocations
                 .GetSingleParamsOf(nameof(OrganizerServices.ContainType))
                 .GetTypesToCreateByNames(types)
                 .CreateRequeredTypes(fullTargetPath);
-
 
             return invocations;
         }
@@ -65,25 +64,30 @@ namespace Organizer.Generator.Services.TypeServices
                 .Select(info => info.ElementAt(1));
 
             types
-                .GetTypesToCreateByPatterns(ignoredPatterns , acceptedPatterns)
+                .GetTypesToCreateByPatterns(ignoredPatterns, acceptedPatterns)
                 .CreateRequeredTypes(fullTargetPath);
-
         }
 
         private static void CreateRequeredTypes
             (this IEnumerable<BaseTypeDeclarationSyntax> typesToCreate,
             string fullTargetPath)
         {
-            foreach (var (type, typePath)
-                in from type in typesToCreate
-                   let typePath = Path
-                   .Combine(fullTargetPath, type.Identifier.Text + ".g.cs")
-                   .Replace("\\\\", "\\")
-                   .Replace("\\", "\\\\")
-            select (type, typePath))
-            {
-                File.WriteAllText(typePath, contents: type.SyntaxTree.ToString());
-            }
+            Action<BaseTypeDeclarationSyntax, string> CreateFile = (type, typePath) =>
+                 {
+                     using (var writer = new StreamWriter(typePath))
+                         writer.Write(type.SyntaxTree.ToString());
+                 };
+
+            Func<BaseTypeDeclarationSyntax, string> GetTypePath = (type)
+                 => Path
+                    .Combine(fullTargetPath, type.Identifier.Text + ".g.cs")
+                    .Replace("\\\\", "\\")
+                    .Replace("\\", "\\\\");
+
+            typesToCreate
+                .AsParallel()
+                .Select(type => new { content = type, path = GetTypePath(type) })
+                .ForAll(_ => CreateFile(_.content, _.path));
         }
 
         private static string GetFullTargetPath(string targetPath, Node node)
@@ -91,16 +95,16 @@ namespace Organizer.Generator.Services.TypeServices
             var folderPath = node.Value?.Header?
                 .GetSingleParamsOf(nameof(OrganizerServices.CreateFolder))
                 .LastOrDefault();
-            
-            return folderPath is null ? targetPath : 
+
+            return folderPath is null ? targetPath :
                 Path.Combine(targetPath, folderPath)
                 .Replace("\\\\", "\\")
                 .Replace("\\", "\\\\"); ;
         }
+
         private static IEnumerable<InvocationExpressionSyntax> GetPrimaryBlockInvocations
             (this Value value)
         {
-
             var invocations = new string(
                 value
                 .Block
@@ -118,8 +122,7 @@ namespace Organizer.Generator.Services.TypeServices
         }
 
         private static IEnumerable<BaseTypeDeclarationSyntax> GetTypesToCreateByNames
-            (this IEnumerable<string> typesNameToCreate,
-            IEnumerable<BaseTypeDeclarationSyntax> types)
+            (this IEnumerable<string> typesNameToCreate, IEnumerable<BaseTypeDeclarationSyntax> types)
             => from type in types
                join typeName in typesNameToCreate
                on type.Identifier.Text.ToString() equals typeName

@@ -1,4 +1,3 @@
-using System;
 namespace Organizer.Services.Tests;
 
 public class HelpersTests
@@ -107,9 +106,8 @@ public class HelpersTests
             .GetInvocationsByName("OrganizerService");
 
         Assert.Equivalent(expectedInvocations, actualInvocations);
-
     }
-    
+
     [Fact]
     public void GetSingleParamsOf_CollectionOfInvocation_ParametersOfSpicificInvocation()
     {
@@ -124,13 +122,12 @@ public class HelpersTests
             .DescendantNodes()
             .OfType<InvocationExpressionSyntax>();
 
-        var expectedParams = new[]{ "type1","type2" };
+        var expectedParams = new[] { "type1", "type2" };
 
         var actualParams = invocations
             .GetSingleParamsOf("OrganizerService");
-        
-        Assert.Equivalent(expectedParams, actualParams);
 
+        Assert.Equivalent(expectedParams, actualParams);
     }
 
     [Fact]
@@ -153,7 +150,5 @@ public class HelpersTests
             .First();
 
         Assert.Equivalent(expectedParams, actualParams);
-
     }
 }
-

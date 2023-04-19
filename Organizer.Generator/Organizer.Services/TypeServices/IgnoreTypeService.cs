@@ -1,6 +1,8 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using Organizer.Client;
 using Organizer.Services;
 
@@ -28,9 +30,8 @@ namespace Organizer.Generator.Services.TypeServices
             from type in types
             let typeName = type.Identifier.Text.ToString()
             let ignoredNames = invocations.GetSingleParamsOf(nameof(OrganizerServices.IgnoreType))
-            where ! ignoredNames.Any(ignrName => typeName.Equals(ignrName))
+            where !ignoredNames.Any(ignrName => typeName.Equals(ignrName))
             select type;
-
 
         private static IEnumerable<BaseTypeDeclarationSyntax> IgnoreTypesByPattern
             (this IEnumerable<BaseTypeDeclarationSyntax> types,
@@ -40,8 +41,7 @@ namespace Organizer.Generator.Services.TypeServices
             from type in types
             let typeName = type.Identifier.Text.ToString()
             let ignoredPatterns = invocations.GetSingleParamsOf(nameof(OrganizerServices.IgnoreTypes))
-            where ! ignoredPatterns.Any(ignrPtrn => typeName.Contains(ignrPtrn))
+            where !ignoredPatterns.Any(ignrPtrn => typeName.Contains(ignrPtrn))
             select type;
-
     }
 }

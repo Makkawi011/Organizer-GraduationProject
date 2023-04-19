@@ -7,7 +7,7 @@ public class HeaderHandlerTests
     [Fact]
     public void RefactorCreateFolderPaths_ReturnUpdatedCreateFolderInvocs_When3SeqCreatFolderInvocs()
     {
-        var headers =GetBlocks("""
+        var headers = GetBlocks("""
                 {
                 CreateFolder("Path1");
                     {
@@ -24,11 +24,10 @@ public class HeaderHandlerTests
             CreateFolder("Path2");
             CreateFolder("Path3");
             """)
-            .Select(invoc => new InvocationExpressionSyntax[]{invoc});
+            .Select(invoc => new InvocationExpressionSyntax[] { invoc });
 
         var node3 = new Node()
         {
-            
             Value = new Value
             {
                 Block = headers.ElementAt(3),
@@ -45,14 +44,14 @@ public class HeaderHandlerTests
                 Header = invocations.ElementAt(1)
             }
         };
-        
+
         var node1 = new Node()
         {
             Children = new List<Node> { node2, node3 },
             Value = new Value
             {
                 Block = headers.ElementAt(1),
-                Header =  invocations.First()
+                Header = invocations.First()
             }
         };
 
@@ -118,7 +117,7 @@ public class HeaderHandlerTests
             {
                 Block = blockSyntax
 
-                //header => null  by defult 
+                //header => null  by defult
             }
         };
 
@@ -142,18 +141,18 @@ public class HeaderHandlerTests
         // Arrange
 
         var supFolderPath = "\"path1\"";
-        var createSup = @"CreateFolder("+ supFolderPath + ")";
+        var createSup = @"CreateFolder(" + supFolderPath + ")";
 
         var subFolderPath = "\"path2\"";
-        var createSub = @"CreateFolder("+ subFolderPath + ")";
+        var createSub = @"CreateFolder(" + subFolderPath + ")";
 
         var fullPath = "\"path1\\\\path2\"";
         var expectedInvocation = CSharpSyntaxTree
-            .ParseText(nameof(OrganizerServices.CreateFolder)+"("+fullPath+")")
+            .ParseText(nameof(OrganizerServices.CreateFolder) + "(" + fullPath + ")")
             .GetRoot().DescendantNodes().OfType<InvocationExpressionSyntax>()
             .Single();
 
-        string blocks = "ctor{"+ createSup + "{" + createSub +"{ } } }";
+        string blocks = "ctor{" + createSup + "{" + createSub + "{ } } }";
         var blockSyntax = GetBlocks(blocks); ;
         var rootHeaderInvocations = GetInvocations("Ctor");
         var node1HeaderInvocations = GetInvocations(createSup);
@@ -166,7 +165,7 @@ public class HeaderHandlerTests
             {
                 Block = blockSyntax.ElementAt(0)
 
-                //header => empty 
+                //header => empty
             }
         };
         root.SetHeaderNode(rootHeaderInvocations);
@@ -178,7 +177,7 @@ public class HeaderHandlerTests
             {
                 Block = blockSyntax.ElementAt(1)
 
-                //header => empty  
+                //header => empty
             }
         };
         root.AppendChild(node1);
@@ -202,6 +201,7 @@ public class HeaderHandlerTests
         // Assert
         Assert.Equal(expectedInvocation.ToString(), node2.Value.Header.Single().ToString());
     }
+
     [Fact]
     public void GetNodeHeader_ReturnsNull_WhenNoInvocationsInHeader()
     {
@@ -219,6 +219,7 @@ public class HeaderHandlerTests
 
         Assert.Empty(actualHeader);
     }
+
     [Fact]
     public void GetNodeHeader_ReturnsInvocationsAsString_WhenInvocationsInHeader()
     {
@@ -245,16 +246,18 @@ public class HeaderHandlerTests
     }
 
     #region Helpers
-    private static IEnumerable<BlockSyntax> GetBlocks(string code) 
+
+    private static IEnumerable<BlockSyntax> GetBlocks(string code)
         => CSharpSyntaxTree.ParseText(code)
             .GetRoot()
             .DescendantNodes()
             .OfType<BlockSyntax>();
+
     private static IEnumerable<InvocationExpressionSyntax> GetInvocations(string code)
     => CSharpSyntaxTree.ParseText(code)
         .GetRoot()
         .DescendantNodes()
         .OfType<InvocationExpressionSyntax>();
 
-    #endregion
+    #endregion Helpers
 }

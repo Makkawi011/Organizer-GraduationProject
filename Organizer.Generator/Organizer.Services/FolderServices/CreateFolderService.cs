@@ -1,8 +1,9 @@
-﻿using Organizer.Client;
-using Organizer.Tree;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
+using Organizer.Client;
+using Organizer.Tree;
 
 namespace Organizer.Generator.Services.FolderServices
 {
@@ -26,7 +27,7 @@ namespace Organizer.Generator.Services.FolderServices
                 var fullPath = Path.Combine(targetPath, path)
                     .Replace("\\\\", "\\")
                     .Replace("\\", "\\\\");
-                
+
                 if (!Directory.Exists(fullPath))
                     Directory.CreateDirectory(fullPath);
             }

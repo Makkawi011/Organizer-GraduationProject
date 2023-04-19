@@ -1,7 +1,4 @@
-﻿using Organizer.Generator.Services.TypeServices;
-using Organizer.Tree;
-
-namespace Organizer.Services.Tests.TypeServicesTests;
+﻿namespace Organizer.Services.Tests.TypeServicesTests;
 
 public class IgnoreTypeServiceTests
 {
@@ -36,7 +33,7 @@ public class IgnoreTypeServiceTests
             BindingFlags.Static);
 
         var typesRested = (IEnumerable<BaseTypeDeclarationSyntax>?)method!
-            .Invoke(null, new object [] { types , invocations });
+            .Invoke(null, new object[] { types, invocations });
 
         Assert.Empty(typesRested!);
     }

@@ -2,7 +2,7 @@
 
 namespace Organizer.Services.Tests.TypeServicesTests;
 
-//first 4 function in ContainTypeService will tested when run generator 
+//first 4 function in ContainTypeService will tested when run generator
 public class ContainTypeServiceTests
 {
     [Fact]
@@ -92,7 +92,6 @@ public class ContainTypeServiceTests
             }
         };
 
-
         //Act
         var method = typeof(ContainTypeServcie)
             .GetMethod("GetPrimaryBlockInvocations",
@@ -147,4 +146,3 @@ public class ContainTypeServiceTests
         Assert.Equal(acutalFullTargetPath, expectedFullTargetPath);
     }
 }
-    

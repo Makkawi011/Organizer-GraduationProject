@@ -2,7 +2,6 @@
 
 public class HelpersTests
 {
-
     [Theory]
     [InlineData(0)]
     [InlineData(1)]
@@ -85,8 +84,10 @@ public class HelpersTests
         // Assert
         Assert.True(actual);
     }
+
     #region Helpers
-    static Node? CreatNodeWithDepth(int depth)
+
+    private static Node? CreatNodeWithDepth(int depth)
     {
         if (depth <= 0) return null;
         if (depth == 1) return new();
@@ -101,6 +102,6 @@ public class HelpersTests
 
         return nodes.First();
     }
-    #endregion
 
+    #endregion Helpers
 }

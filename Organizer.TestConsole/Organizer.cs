@@ -3,20 +3,27 @@ using Organizer.Client.Attributes;
 
 namespace Organizer.TestConsole;
 
-class Organizer : OrganizerServices
+internal class Organizer : OrganizerServices
 {
-    [From("C:\\Users\\a\\Source\\Repos\\Organizer\\Organizer.Generator\\Organizer.Tree")]
-    [To("C:\\Users\\a\\source\\repos\\Organizer\\Organizer.TestConsole")]
+    [From("C:\\Users\\a\\Desktop\\UnStructuredCode.cs")]
+    [To("C:\\Users\\a\\Source\\Repos\\Organizer\\Organizer.TestConsole")]
     public Organizer()
     {
-        CreateFolder("Path1");
+        CreateFolder("OrganizedCode");
         {
-            CreateFolder("Path2");
+            CreateFolder("Requests");
             {
-                CreateFolder("Path3");
-                {
-                    ContainTypes("H");
-                }
+                ContainTypes("Request");
+                IgnoreType("Garbage");
+            }
+            CreateFolder("Responses");
+            {
+                UpdateTypes("Response", "Res");
+                ContainTypes("Res");
+            }
+            CreateFolder("DataModels");
+            {
+                ContainTypes("Model");
             }
         }
     }

@@ -24,12 +24,10 @@ namespace Organizer.Controller
                 .Where(node => node.IsLeaf)
                 .CreateForFolders(toDirPath);
 
-             orgCtor?.GetCustomerTypeDeclarationSyntaxes()
-                .IgnoreForTypes(orgCtor)
-                .UpdateForTypes(orgCtor)
-                .ContainForTypes(nodes, toDirPath);
-
+            orgCtor?.GetCustomerTypeDeclarationSyntaxes()
+               .IgnoreForTypes(orgCtor)
+               .UpdateForTypes(orgCtor)
+               .ContainForTypes(nodes, toDirPath);
         }
-
     }
 }

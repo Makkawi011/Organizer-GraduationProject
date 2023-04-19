@@ -10,7 +10,7 @@ public class RoslynTests
         // Arrange
         var expectedOrganizerCtor = "public Organizer() { }";
         var organizerClss = CSharpSyntaxTree
-            .ParseText(@"class Organizer : OrganizerServices {"+ expectedOrganizerCtor +"}")
+            .ParseText(@"class Organizer : OrganizerServices {" + expectedOrganizerCtor + "}")
             .GetRoot()
             .DescendantNodes()
             .OfType<ClassDeclarationSyntax>()
@@ -44,7 +44,7 @@ public class RoslynTests
 
         Assert.Equal(expectedOrganizerCtor, actualOrganizerCtor.ToString());
     }
-    
+
     [Fact]
     public void GetBlockSyntaxes_ReturnsBlockSyntaxCollection_WhenTheInputOrganizerCtor()
     {
@@ -95,6 +95,7 @@ public class RoslynTests
 
         Assert.Equivalent(expectedClasses, actualClasses);
     }
+
     [Fact]
     public void GetClasses_ReturnsClassesDeclarationSynatxCollection_WhenTheInputCollectionOfSyntaxTree()
     {
@@ -104,8 +105,7 @@ public class RoslynTests
         var tree3 = CSharpSyntaxTree.ParseText("class clss2 {}");
         var trees = new[] { tree1, tree2, tree3 };
 
-
-        var expectedClasses = new[] 
+        var expectedClasses = new[]
         {
             tree1.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>(),
             tree2.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>(),
@@ -145,6 +145,7 @@ public class RoslynTests
     }
 
     #region Helpers
+
     private static Node CreateNode(ClassDeclarationSyntax classDeclaration)
     {
         var block =
@@ -152,7 +153,7 @@ public class RoslynTests
             .DescendantNodes()
             .OfType<ConstructorDeclarationSyntax>()
             .First()
-            .DescendantNodes ()
+            .DescendantNodes()
             .OfType<BlockSyntax>()
             .First();
 
@@ -164,5 +165,6 @@ public class RoslynTests
             }
         };
     }
-    #endregion
+
+    #endregion Helpers
 }

@@ -9,7 +9,6 @@ namespace Organizer.Tree
         public List<Node> Children { get; set; } = Enumerable.Empty<Node>().ToList();
         public Node Parent { get; set; }
 
-
         public bool IsLeaf => Children.Count == 0;
 
         internal void AppendChild(Node child)
@@ -18,11 +17,8 @@ namespace Organizer.Tree
             child.Parent = this;
         }
 
-        internal bool IsParentOf(Node child) 
+        internal bool IsParentOf(Node child)
             => Value.Block.SpanStart < child.Value.Block.SpanStart
             && Value.Block.Span.End > child.Value.Block.Span.End;
     }
 }
-
-
-

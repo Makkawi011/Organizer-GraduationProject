@@ -1,11 +1,11 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 using Organizer.Client;
 using Organizer.Services;
-
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Organizer.Generator.Services.TypeServices
 {
@@ -40,6 +40,7 @@ namespace Organizer.Generator.Services.TypeServices
 
             return updatedTypes;
         }
+
         private static IEnumerable<BaseTypeDeclarationSyntax> UpdateForTypesByPattern
             (this IEnumerable<BaseTypeDeclarationSyntax> types,
             IEnumerable<InvocationExpressionSyntax> invocations)
@@ -53,13 +54,12 @@ namespace Organizer.Generator.Services.TypeServices
                 .Select(type => UpdaterByTypeName(type, updatedTypesByName))
                 .Select(type => Helpers.ConvertToBaseTypeDeclarationSyntax(type));
 
-
             return updatedTypes;
         }
 
         private static IEnumerable<IEnumerable<string>> ToUpdatedTypesNames
             (this IEnumerable<IEnumerable<string>> updatedTypesByPattern,
-            IEnumerable<BaseTypeDeclarationSyntax> oldTypes) 
+            IEnumerable<BaseTypeDeclarationSyntax> oldTypes)
 
             => from patterns in updatedTypesByPattern
                let oldPattern = patterns.First()
@@ -74,8 +74,7 @@ namespace Organizer.Generator.Services.TypeServices
                    newTypeName,
                };
 
-
-        private static string UpdaterByTypeName(string type , IEnumerable<IEnumerable<string>> parameters)
+        private static string UpdaterByTypeName(string type, IEnumerable<IEnumerable<string>> parameters)
         {
             foreach (var @params in parameters)
             {
@@ -85,6 +84,5 @@ namespace Organizer.Generator.Services.TypeServices
             }
             return type;
         }
-
     }
 }

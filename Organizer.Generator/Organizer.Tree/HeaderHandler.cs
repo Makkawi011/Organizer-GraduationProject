@@ -1,10 +1,12 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using System;
 using System.Collections.Generic;
-using System;
-using System.Linq;
-using Organizer.Client;
 using System.IO;
+using System.Linq;
+
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
+using Organizer.Client;
 
 namespace Organizer.Tree
 {
@@ -24,8 +26,8 @@ namespace Organizer.Tree
                 .GetRoot()
                 .DescendantNodes()
                 .OfType<InvocationExpressionSyntax>();
-
         }
+
         internal static void SetHeaderNode(this Node node, IEnumerable<InvocationExpressionSyntax> orginalHeader)
         {
             //header is new information
@@ -35,7 +37,6 @@ namespace Organizer.Tree
         private static IEnumerable<InvocationExpressionSyntax> RefactorCreateFolderPaths
             (IEnumerable<InvocationExpressionSyntax> orginalHeader, Node parent)
         {
-
             if (parent is null) return orginalHeader;
 
             var lastParentCreatFolderInvoc = parent.Value.Header?
@@ -65,8 +66,8 @@ namespace Organizer.Tree
                         .Replace("\\\\", "\\")
                         .Replace("\\", "\\\\");
 
-                    var newCreateFolderInvocation = nameof(OrganizerServices.CreateFolder)+"(\""+path+"\");";
-                    
+                    var newCreateFolderInvocation = nameof(OrganizerServices.CreateFolder) + "(\"" + path + "\");";
+
                     var newInvoc = CSharpSyntaxTree
                         .ParseText(newCreateFolderInvocation)
                         .GetRoot()

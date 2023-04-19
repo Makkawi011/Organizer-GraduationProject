@@ -12,7 +12,6 @@ public class ValueTests
             .DescendantNodes()
             .OfType<BlockSyntax>()
             .First();
-        
 
         // Act
         value.Block = block;

@@ -20,18 +20,20 @@ namespace Organizer.Services
 
         internal static string GetTypeName(this ArgumentSyntax arg)
             => arg.GetParameterValue();
+
         internal static BaseTypeDeclarationSyntax ConvertToBaseTypeDeclarationSyntax(string type)
             => CSharpSyntaxTree.ParseText(type)
                 .GetRoot()
                 .DescendantNodes()
                 .OfType<BaseTypeDeclarationSyntax>()
-                .SingleOrDefault();
+                .ElementAtOrDefault(0);
+
         internal static IEnumerable<InvocationExpressionSyntax> GetInvocationsByName
             (this IEnumerable<InvocationExpressionSyntax> invocations, string organizerServiceName)
             => invocations.Where(invoc => invoc.IsName(organizerServiceName));
 
         internal static IEnumerable<string> GetSingleParamsOf
-            (this IEnumerable<InvocationExpressionSyntax> invocations, 
+            (this IEnumerable<InvocationExpressionSyntax> invocations,
             string organizerServiceName)
         {
             return invocations
@@ -39,18 +41,20 @@ namespace Organizer.Services
                 .SelectMany(invoc => invoc.ArgumentList.Arguments)
                 .Select(arg => arg.GetParameterValue());
         }
+
         internal static IEnumerable<IEnumerable<string>> GetMultParamsOf
             (this IEnumerable<InvocationExpressionSyntax> invocations,
             string organizerServiceName)
-        { 
+        {
             return invocations
                 .GetInvocationsByName(organizerServiceName)
                 .Select(invoc => invoc.ArgumentList.Arguments)
                 .Select(args => args.Select(arg => arg.GetParameterValue()));
         }
+
         /// <summary>
-        /// convert BaseTypeDeclarationSyntax to string 
-        /// then add to this string 
+        /// convert BaseTypeDeclarationSyntax to string
+        /// then add to this string
         /// the namespace declaration and the using directives
         /// </summary>
         /// <param name="type">ClassDeclarationSyntax or StructDeclarationSyntax or EnumDeclarationSyntax</param>
@@ -73,11 +77,12 @@ namespace Organizer.Services
                 .OfType<UsingDirectiveSyntax>()
                 .Select(@using => @using.ToString()));
 
-            return namespaceName is null 
-                ? Normailze(string.Concat(usings , type))
+            return namespaceName is null
+                ? Normailze(string.Concat(usings, type))
                 : Normailze(string.Concat(usings, " namespace ", namespaceName, " {", type, " }"));
         }
-        internal static string Normailze(string code) 
+
+        internal static string Normailze(string code)
             => CSharpSyntaxTree.ParseText(code)
                 .GetRoot()
                 .NormalizeWhitespace()
