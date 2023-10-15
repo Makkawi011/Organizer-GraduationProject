@@ -19,3 +19,5 @@ this project presents a source code generator created with Roslyn source generat
  - .NET Standard 2.0 for source generator development.
  - xUnit.
  - .NET 7.0.
+
+# This is Very-Well detailed documentation contributed by Eng. [@Mohamad Amiri](https://github.com/MohaAmiry) for the Organizer Source Code Generator At Compile Time :
