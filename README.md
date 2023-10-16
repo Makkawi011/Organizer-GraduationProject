@@ -21,5 +21,5 @@ this project presents a source code generator created with Roslyn source generat
  - .NET 7.0.
 
 # Very-Well detailed documentation :
-#### contributed by Eng. [@Mohamad Amiri](https://github.com/MohaAmiry) and Reviewed by me.
+#### Contributed by Eng. [@Mohamad Amiri](https://github.com/MohaAmiry) and Reviewed by me.
 [The Organizer Source Code Generator At Compile Time Documentation PDF Link](https://github.com/MohaAmiry/Organizer/blob/master/Organizer%20Official%20Document.pdf)
