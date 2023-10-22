@@ -1,8 +1,8 @@
 # Summary:
-Organizer a tool called that automates the process of organizing system architecture files and folders based on the developer’s preference. So, for now, that could be used by the client to organize the structure of their source code or a part of it in compile time. This will result in more usable source code as it will be easier to surf, access and read.
+Organizer a tool called that automates the process of organizing system architecture files and folders based on the developer’s preference. So, for now, that could be used by the client to organize the structure of their source code or a part of it. This will result in more usable source code as it will be easier to surf, access and read.
 
 ## Important note:
-Currently, for special purposes, this project works in Compiled Time. Soon it will be presented, as it will work in Design Time, which is the most useful thing.
+There are two versions of this project, the first is a Docker Container, which contains a [Console Project](https://github.com/MoMakkawi/Organizer), while (This Version Here) the second is Soucre Generator Run at Compite-Time.
 
 # General idea:
 This project is in the field of code generation, exactly in compile-time source code generation (source generator), It generates source code files during compile time.
